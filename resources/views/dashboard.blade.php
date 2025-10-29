@@ -34,7 +34,6 @@
         </nav>
     </aside>
 
-C:\Users\a\Desktop\LIB\ProgrammingProjects\PhpProjects\Onpa\resources\views\dashboard.blade.php
 
     <!-- Main Content -->
     <main class="flex-1 p-8">
