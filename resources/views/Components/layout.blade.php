@@ -14,6 +14,10 @@
     .text-pink {
         color: #e43397;
     }
+
+    .text-turqoise{
+        colour: #33d8e4
+    }
 </style>
 
 <body class="bg-gray-900 flex">
