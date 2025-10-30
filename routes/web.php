@@ -17,7 +17,7 @@ Route::get('/songs', [SongController::class, 'index'])->name('songs.index');
 Route::get('/songs/create', [SongController::class, 'create'])->name('songs.create');
 Route::post('/songs', [SongController::class, 'store'])->name('songs.store');
 Route::get('/songs/{id}/edit', [SongController::class, 'edit'])->name('songs.edit');
-Route::patch('/songs/{id}', [SongController::class, 'update'])->name('songs.update');
+Route::patch('/songs/{song}', [SongController::class, 'update'])->name('songs.update');
 Route::delete('/songs/{id}', [SongController::class, 'destroy'])->name('songs.delete');
 Route::get('/songs/{id}', [SongController::class, 'show'])->name('songs.show');
 

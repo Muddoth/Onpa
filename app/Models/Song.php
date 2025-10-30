@@ -15,6 +15,6 @@ class Song extends Model
         'album',
         'genre',
         'file_path',
-        'image_path',
+        'image_path'
     ];
 }
