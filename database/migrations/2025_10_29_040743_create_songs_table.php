@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('songs', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('artist_name');
+            $table->string('name')->nullable();
+            $table->string('image_path')->nullable();
+            $table->string('artist_name')->nullable();
             $table->string('album')->nullable();
             $table->string('genre')->nullable();
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }

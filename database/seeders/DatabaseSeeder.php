@@ -3,7 +3,12 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Tag;
+use App\Models\Song;
+use App\Models\Profile;
+
 use Illuminate\Database\Seeder;
+use Database\Seeders\SongSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,11 +19,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call(SongSeeder::class);
+        Song::factory(10)->create();
+        Profile::factory(5)->create();
+        Tag::factory(9)->create();
     }
 }

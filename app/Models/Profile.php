@@ -11,8 +11,12 @@ class Profile extends Model
 
     protected $fillable = [
         'name',
-        'artist_name',
-        'album',
-        'genre',
+        'age',
+        'gender',
+        'bio',
+        'profile_picture',
+        'favourite_genres',
     ];
 }
+
+

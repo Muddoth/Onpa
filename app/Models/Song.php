@@ -11,10 +11,10 @@ class Song extends Model
 
     protected $fillable = [
         'name',
-        'age',
-        'gender',
-        'bio',
-        'profile_picture',
-        'favourite_genres',
+        'artist_name',
+        'album',
+        'genre',
+        'file_path',
+        'image_path',
     ];
 }

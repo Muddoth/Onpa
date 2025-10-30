@@ -31,8 +31,8 @@
                 Dashboard
             </a>
 
-            <a href="{{ route('songs') }}"
-                class="transition {{ request()->routeIs('songs') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
+            <a href="{{ route('songs.index') }}"
+                class="transition {{ request()->routeIs('songs.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
                 Songs
             </a>
 
