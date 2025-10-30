@@ -21,7 +21,11 @@ class SongController extends Controller
      */
     public function create()
     {
-        return view('songs.create');
+        $genres = Song::select('genre')
+            ->distinct()
+            ->pluck('genre');
+
+        return view('songs.create', compact('genres'));
     }
 
     /**
@@ -34,18 +38,28 @@ class SongController extends Controller
             'artist_name' => 'nullable|string|max:255',
             'album' => 'nullable|string|max:255',
             'genre' => 'nullable|string|max:255',
-            'file_path' => 'required|string|max:255',
-            'image_path' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'audio' => 'required|mimes:mp3,wav,ogg|max:10240',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 
-        $song = Song::create($request->only('name', 'artist_name', 'album', 'genre', 'file_path'));
+        $song = Song::create($request->only('name', 'artist_name', 'album', 'genre'));
 
-        if ($request->hasFile('image_path')) {
-            $image = $request->file('image_path');
-            $filename = str_replace(' ', '_', $song->name) . '.' . $image->getClientOriginalExtension();
-            $path = 'images/songs/' . $filename;
-            $image->move(public_path('images/songs'), $filename);
-            $song->update(['image_path' => $path]);
+        // Handle audio
+        if ($request->hasFile('audio')) {
+            $audio = $request->file('audio');
+            $audioFilename = str_replace(' ', '_', $song->name) . '.' . $audio->getClientOriginalExtension();
+            $audioPath = 'audio/' . $audioFilename;
+            $audio->move(public_path('audio'), $audioFilename);
+            $song->update(['file_path' => $audioPath]);
+        }
+
+        // Handle image
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageFilename = str_replace(' ', '_', $song->name) . '.' . $image->getClientOriginalExtension();
+            $imagePath = 'images/songs/' . $imageFilename;
+            $image->move(public_path('images/songs'), $imageFilename);
+            $song->update(['image_path' => $imagePath]);
         }
 
         return redirect()->route('songs.index')->with('success', 'Song added successfully!');

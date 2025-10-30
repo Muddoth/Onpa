@@ -5,8 +5,8 @@
         <div
             class="bg-gray-800 rounded-2xl shadow-lg p-6 hover:scale-105 transition-transform duration-300 hover:shadow-xl border border-gray-700 p-6 flex justify-between items-center">
             <div>
-                <h2 class="text-gray-500 text-sm uppercase">Total Songs</h2>
-                <p class="text-3xl font-bold text-pink-500">24</p>
+                <h2 class="text-white text-sm uppercase">Total Songs</h2>
+                <p class="text-3xl font-bold text-pink-500">{{ $totalSongs }}</p>
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-pink-400" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
@@ -17,8 +17,8 @@
         <div
             class="bg-gray-800 rounded-2xl shadow-lg p-6 hover:scale-105 transition-transform duration-300 hover:shadow-xl border border-gray-700 p-6 flex justify-between items-center">
             <div>
-                <h2 class="text-gray-500 text-sm uppercase">Total Genres</h2>
-                <p class="text-3xl font-bold text-pink-500">5</p>
+                <h2 class="text-white text-sm uppercase">Total Genres</h2>
+                <p class="text-3xl font-bold text-pink-500">{{ $totalGenres }}</p>
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-pink-400" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
@@ -31,27 +31,19 @@
     <!-- This is the provided component -->
     <div class="w-full">
         <div
-            class='bg-gray-800 rounded-2xl shadow-lg p-6 hover:scale-105 transition-transform duration-300 hover:shadow-xl border border-gray-700 flex w-8/12 overflow-hidden mx-auto'>
+            class='bg-gray-800 rounded-2xl shadow-lg p-6 hover:scale-105 transition-transform duration-300 hover:shadow-xl border border-gray-700 flex w-11/12  overflow-hidden mx-auto'>
             <div class="flex flex-col w-full">
                 <div class="flex p-5 border-b">
                     <img class='w-20 h-20 object-cover' alt='User avatar'
                         src='https://images.unsplash.com/photo-1477118476589-bff2c5c4cfbb?auto=format&fit=crop&w=200&q=200'>
                     <div class="flex flex-col px-2 w-full">
-                        <span class="text-xs text-gray-700 uppercase font-medium">now playing</span>
+                        <span class="text-xs text-blue-500 uppercase font-medium">now playing</span>
                         <span class="text-sm text-pink-500 capitalize font-semibold pt-1">
                             I think I need a sunrise, I'm tired of the sunset
                         </span>
-                        <span class="text-xs text-gray-500 uppercase font-medium">
+                        <span class="text-xs text-white uppercase font-medium">
                             -"Boston," Augustana
                         </span>
-                        {{-- <div class="flex justify-end">
-                            <img class="w-5 cursor-pointer"
-                                src="https://www.iconpacks.net/icons/2/free-favourite-icon-2765-thumb.png" />
-                            <img class="w-5 cursor-pointer mx-2"
-                                src="https://www.iconpacks.net/icons/2/free-favourite-icon-2765-thumb.png" />
-                            <img class="w-5 cursor-pointer"
-                                src="https://www.iconpacks.net/icons/2/free-favourite-icon-2765-thumb.png" />
-                        </div> --}}
                     </div>
                 </div>
 
@@ -90,44 +82,42 @@
                             02:00/04:00
                         </span>
                     </div>
+
+                    <!--Playlist-->
+                    <div class="flex flex-col p-5">
+
+                        <div class="flex border-b py-3 cursor-pointer hover:shadow-md px-2">
+                            <img class='w-10 h-10 object-cover rounded-lg' alt='User avatar'
+                                src='https://images.unsplash.com/photo-1477118476589-bff2c5c4cfbb?auto=format&fit=crop&w=200&q=200'>
+                            <div class="flex flex-col px-2 w-full">
+                                <span class="text-sm text-pink-500 capitalize font-semibold pt-1">
+                                    I think I need a sunrise, I'm tired of the sunset
+                                </span>
+                                <span class="text-xs text-white uppercase font-medium">
+                                    -"Boston," Augustana
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex border-b py-3 cursor-pointer hover:shadow-md px-2">
+                            <img class='w-10 h-10 object-cover rounded-lg' alt='User avatar'
+                                src='https://images.unsplash.com/photo-1477118476589-bff2c5c4cfbb?auto=format&fit=crop&w=200&q=200'>
+                            <div class="flex flex-col px-2 w-full">
+                                <span class="text-sm text-pink-500 capitalize font-semibold pt-1">
+                                    I think I need a sunrise, I'm tired of the sunset
+                                </span>
+                                <span class="text-xs text-white uppercase font-medium">
+                                    -"Boston," Augustana
+                                </span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                {{-- playlist --}}
-
-                {{-- <div class="flex flex-col p-5">
-                    <div class="border-b pb-1 flex justify-between items-center mb-2">
-                        <span class="text-base font-semibold uppercase text-gray-700">playlist</span>
-                        <img class="w-4 cursor-pointer"
-                            src="https://p.kindpng.com/picc/s/152-1529312_filter-ios-filter-icon-png-transparent-png.png" />
-                    </div>
-
-                    <div class="flex border-b py-3 cursor-pointer hover:shadow-md px-2">
-                        <img class='w-10 h-10 object-cover rounded-lg' alt='User avatar'
-                            src='https://images.unsplash.com/photo-1477118476589-bff2c5c4cfbb?auto=format&fit=crop&w=200&q=200'>
-                        <div class="flex flex-col px-2 w-full">
-                            <span class="text-sm text-pink-500 capitalize font-semibold pt-1">
-                                I think I need a sunrise, I'm tired of the sunset
-                            </span>
-                            <span class="text-xs text-gray-500 uppercase font-medium">
-                                -"Boston," Augustana
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="flex border-b py-3 cursor-pointer hover:shadow-md px-2">
-                        <img class='w-10 h-10 object-cover rounded-lg' alt='User avatar'
-                            src='https://images.unsplash.com/photo-1477118476589-bff2c5c4cfbb?auto=format&fit=crop&w=200&q=200'>
-                        <div class="flex flex-col px-2 w-full">
-                            <span class="text-sm text-pink-500 capitalize font-semibold pt-1">
-                                I think I need a sunrise, I'm tired of the sunset
-                            </span>
-                            <span class="text-xs text-gray-500 uppercase font-medium">
-                                -"Boston," Augustana
-                            </span>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
+
+
+
+
         </div>
     </div>
 

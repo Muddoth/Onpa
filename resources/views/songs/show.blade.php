@@ -1,14 +1,19 @@
 <x-layout title="{{ $song->name }}">
+    @slot('headerButton')
+    <a href="{{ route('songs.edit', $song->id) }}"
+        class="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-lg">
+        Edit Song
+    </a>
+    @endslot
     <div class="w-full">
         <div
             class="bg-gray-800 rounded-2xl shadow-lg p-6 transition-transform duration-300 hover:shadow-xl border border-gray-700 flex w-8/12 overflow-hidden mx-auto">
-            
+
             <div class="flex flex-col w-full">
                 <!-- Song Info -->
                 <div class="flex p-5 border-b border-gray-700">
-                    <img class="w-20 h-20 object-cover rounded-full bg-gray-700"
-                         alt="Album Art"
-                         src="{{ asset('images/song-icon.png') }}">
+                    <img class="w-20 h-20 object-cover rounded-full bg-gray-700" alt="Album Art"
+                        src="{{ asset($song->image_path ?? 'images/song-icon.png') }}">
                     <div class="flex flex-col px-3 w-full">
                         <span class="text-xs text-gray-400 uppercase font-medium">Now Playing</span>
                         <span class="text-lg text-pink-400 capitalize font-semibold pt-1">
@@ -29,8 +34,7 @@
                         <div class="flex space-x-3 p-2">
                             <!-- Previous -->
                             <button class="focus:outline-none hover:scale-110 transition">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"
-                                    stroke="#e43397" stroke-width="2"
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#e43397" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
                                     <polygon points="19 20 9 12 19 4 19 20"></polygon>
                                     <line x1="5" y1="19" x2="5" y2="5"></line>
@@ -40,8 +44,7 @@
                             <!-- Play -->
                             <button
                                 class="rounded-full w-10 h-10 flex items-center justify-center ring-1 ring-pink-400 hover:bg-pink-400 hover:text-gray-900 transition focus:outline-none">
-                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"
-                                    stroke="white" stroke-width="2"
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
                                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                                 </svg>
@@ -49,8 +52,7 @@
 
                             <!-- Next -->
                             <button class="focus:outline-none hover:scale-110 transition">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"
-                                    stroke="#e43397" stroke-width="2"
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="#e43397" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
                                     <polygon points="5 4 15 12 5 20 5 4"></polygon>
                                     <line x1="19" y1="5" x2="19" y2="19"></line>
@@ -77,8 +79,8 @@
                 <div class="mt-4 px-5">
                     <audio controls class="w-full rounded-lg">
                         <source src="{{ asset($song->file_path) }}" type="audio/mpeg">
-                        Your browser does not support the audio element.
                     </audio>
+
                 </div>
             </div>
         </div>

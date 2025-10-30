@@ -10,7 +10,7 @@ class SongSeeder extends Seeder
 {
     public function run(): void
     {
-        $folder = 'C:\\Users\\a\\Videos\\SnapDownloader';
+        $folder = 'C:\Users\a\Desktop\LIB\ProgrammingProjects\PhpProjects\Onpa\public\audio';
         $faker = Faker::create();
 
         if (!is_dir($folder)) {
@@ -33,7 +33,7 @@ class SongSeeder extends Seeder
                 'artist_name' => $faker->name(),
                 'album' => $faker->words(2, true),
                 'genre' => $faker->randomElement(['Pop', 'Rock', 'Hip Hop', 'Jazz', 'Classical', 'Electronic']),
-                'file_path' => $folder . DIRECTORY_SEPARATOR . $file,
+                'file_path' => 'audio/' . $file,
                 'image_path' => $faker->imageurl(),
             ]);
         }

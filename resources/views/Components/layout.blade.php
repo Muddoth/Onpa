@@ -14,10 +14,6 @@
     .text-pink {
         color: #e43397;
     }
-
-    .text-turqoise{
-        colour: #33d8e4
-    }
 </style>
 
 <body class="bg-gray-900 flex">
@@ -58,10 +54,16 @@
     <!-- Main Content -->
     <main class="flex-1 p-8">
         <!--Header Bar-->
-        <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 mb-8 shadow-md">
+        <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 mb-8 shadow-md flex justify-between items-center">
             <h1 class="text-3xl font-bold text-pink-400">{{ $title ?? '' }}</h1>
+            @isset($headerButton)
+                <div>
+                    {{ $headerButton }}
+                </div>
+            @endisset
         </div>
-        
+
+
         {{ $slot }}
     </main>
 </body>
