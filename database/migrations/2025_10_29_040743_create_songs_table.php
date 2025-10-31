@@ -21,7 +21,9 @@ return new class extends Migration
             $table->string('album')->nullable();
             $table->string('genre')->nullable();
             $table->string('file_path')->nullable();
-            $table->timestamps();
+            $table->softDeletes(); // Adds a nullable 'deleted_at' TIMESTAMP column
+            $table->timestamps();  // Adds 'created_at' and 'updated_at'
+
         });
     }
 

@@ -20,7 +20,7 @@
 
 
     <!-- Sidebar -->
-    <aside class="w-1/5 bg-gray-800/50 text-white min-h-screen p-6">
+    <aside class="w-1/5 bg-gray-800/50 text-white min-h-screen p-6 border-gray-700 fixed">
         <div class="flex items-center mb-10 space-x-3">
             <img src="{{ asset('images/onpa-logo.png') }}" alt="Onpa Logo" class="w-20 h-20">
             <h1 class="text-2xl font-bold text-pink-400">Onpa</h1>
@@ -36,8 +36,8 @@
                 Songs
             </a>
 
-            <a href="{{ route('profile') }}"
-                class="transition {{ request()->routeIs('profile') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
+            <a href="{{ route('profiles.index') }}"
+                class="transition {{ request()->routeIs('profiles.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
                 User Profile
             </a>
 
@@ -52,9 +52,10 @@
 
 
     <!-- Main Content -->
-    <main class="flex-1 p-8">
-        <!--Header Bar-->
-        <div class="bg-gray-900 border border-gray-700 rounded-xl p-4 mb-8 shadow-md flex justify-between items-center">
+    <main class="flex-1 p-8 ml-[20%]"> <!-- shift right by sidebar width -->
+        <!-- Header Bar -->
+        <div
+            class="bg-gray-900 border-b border-gray-700 p-4 mb-8 flex justify-between items-center fixed top-0 left-[20%] w-[80%] z-50">
             <h1 class="text-3xl font-bold text-pink-400">{{ $title ?? '' }}</h1>
             @isset($headerButton)
                 <div>
@@ -63,9 +64,12 @@
             @endisset
         </div>
 
-
-        {{ $slot }}
+        <!-- Add padding-top so content isn't hidden under header -->
+        <div class="pt-20">
+            {{ $slot }}
+        </div>
     </main>
+
 </body>
 
 </html>

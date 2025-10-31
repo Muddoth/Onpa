@@ -14,34 +14,37 @@ class SongSeeder extends Seeder
         $imageFolder = public_path('images/songs');
         $faker = Faker::create();
 
-        // Scan and sort both folders by modification date
         $audioFiles = collect(scandir($audioFolder))
-            ->filter(fn($f) => !in_array($f, ['.', '..']))
-            ->map(fn($f) => $audioFolder . DIRECTORY_SEPARATOR . $f)
-            ->sortBy(fn($f) => filemtime($f))
+            ->filter(fn($f) => !in_array($f, ['.', '..']) && pathinfo($f, PATHINFO_EXTENSION) === 'mp3')
             ->values();
 
-        $imageFiles = collect(scandir($imageFolder))
-            ->filter(fn($f) => !in_array($f, ['.', '..']))
-            ->map(fn($f) => $imageFolder . DIRECTORY_SEPARATOR . $f)
-            ->sortBy(fn($f) => filemtime($f))
-            ->values();
+        $count = 0;
 
-        $count = min($audioFiles->count(), $imageFiles->count());
+        foreach ($audioFiles as $audioFile) {
+            // Extract the unique code after the last dash
+            $fileNameWithoutExt = pathinfo($audioFile, PATHINFO_FILENAME);
+            $parts = explode(' - ', $fileNameWithoutExt);
+            $code = end($parts); // e.g. 8081721761877750
+            $songName = $parts[0] ?? $fileNameWithoutExt;
 
-        for ($i = 0; $i < $count; $i++) {
-            $audioPath = $audioFiles[$i];
-            $imagePath = $imageFiles[$i];
-            $name = pathinfo(basename($audioPath), PATHINFO_FILENAME);
+            // Find matching image by code
+            $imageMatch = collect(glob("$imageFolder/*$code.*"))->first();
+
+            // Fallback if no matching image
+            $imagePath = $imageMatch
+                ? 'images/songs/' . basename($imageMatch)
+                : 'images/song-icon.png';
 
             Song::create([
-                'name' => $name,
+                'name' => $songName,
                 'artist_name' => $faker->name(),
                 'album' => $faker->words(2, true),
                 'genre' => $faker->randomElement(['Pop', 'Rock', 'Hip Hop', 'Jazz', 'Classical', 'Electronic']),
-                'file_path' => 'audio/' . basename($audioPath),
-                'image_path' => 'images/songs/' . basename($imagePath),
+                'file_path' => 'audio/' . $audioFile,
+                'image_path' => $imagePath,
             ]);
+
+            $count++;
         }
 
         echo "$count songs seeded successfully!\n";

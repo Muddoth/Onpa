@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SongController;
 use App\Models\Song;
@@ -7,7 +8,9 @@ use App\Models\Song;
 Route::get('/', function () {
     $totalSongs = Song::count();
     $totalGenres = Song::distinct('genre')->count('genre');
-    return view('dashboard', compact('totalSongs', 'totalGenres'));
+    $latestSongs = Song::latest()->take(5)->get();
+
+    return view('dashboard', compact('totalSongs', 'totalGenres', 'latestSongs'));
 })->name('dashboard');
 
 
@@ -21,9 +24,11 @@ Route::patch('/songs/{song}', [SongController::class, 'update'])->name('songs.up
 Route::delete('/songs/{id}', [SongController::class, 'destroy'])->name('songs.delete');
 Route::get('/songs/{id}', [SongController::class, 'show'])->name('songs.show');
 
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');
+
+//Profile CRUD
+Route::get('/profiles', [ProfileController::class, 'index'])->name('profiles.index');
+Route::get('/profiles/edit', [ProfileController::class, 'edit'])->name('profiles.edit');
+Route::post('/profiles/update', [ProfileController::class, 'update'])->name('profiles.update');
 
 Route::get('/record', function () {
     return view('record');
