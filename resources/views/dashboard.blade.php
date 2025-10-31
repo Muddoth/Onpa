@@ -40,6 +40,15 @@
     .fade-in {
         opacity: 1;
     }
+
+
+    .bg-turquoise {
+        background-color: #37a5af;
+    }
+
+    #progress-container:hover {
+        background-color: #a0f0f7;
+    }
 </style>
 
 <x-layout title="Dashboard">
@@ -113,8 +122,15 @@
                             <!-- Song Info -->
                             <p class="text-center mt-1">
                                 <span id="player-name" class="text-pink text-md font-semibold">Name</span>
-                                <span id="player-artist" class="text-white text-xs">by Artist</span>
+                                <span id="player-artist" class="text-white text-xs"></span>
                             </p>
+
+                            <!-- Progress Bar -->
+                            <div id="progress-container"
+                                class="w-full h-2 bg-gray-300 rounded-full mt-4 cursor-pointer">
+                                <div id="progress-bar" class="h-2 bg-turquoise rounded-full" style="width: 0%;"></div>
+                            </div>
+
                             <!-- Controls -->
                             <div class="mt-3 flex justify-center items-center">
                                 <button id="prev-btn"
@@ -133,17 +149,15 @@
 
                                 <button id="play-btn"
                                     class="p-2 rounded-full bg-purple-200 hover:bg-purple-300 focus:outline-none mx-2">
-                                    <!-- play SVG -->
-                                    <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-white-600" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
+                                    <svg id="play-icon" viewBox="0 0 24 24" class="w-3.5 h-3.5 text-white-600"
+                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Default: Play Icon -->
                                         <path
-                                            d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2C7.88562 2 8.82843 2 9.41421 2.58579C10 3.17157 10 4.11438 10 6V18C10 19.8856 10 20.8284 9.41421 21.4142C8.82843 22 7.88562 22 6 22C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V6Z"
-                                            fill="#000000"></path>
-                                        <path
-                                            d="M14 6C14 4.11438 14 3.17157 14.5858 2.58579C15.1716 2 16.1144 2 18 2C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6V18C22 19.8856 22 20.8284 21.4142 21.4142C20.8284 22 19.8856 22 18 22C16.1144 22 15.1716 22 14.5858 21.4142C14 20.8284 14 19.8856 14 18V6Z"
+                                            d="M16.6598 14.6474C18.4467 13.4935 18.4467 10.5065 16.6598 9.35258L5.87083 2.38548C4.13419 1.26402 2 2.72368 2 5.0329V18.9671C2 21.2763 4.13419 22.736 5.87083 21.6145L16.6598 14.6474Z"
                                             fill="#000000"></path>
                                     </svg>
                                 </button>
+
 
                                 <button id="next-btn"
                                     class="p-1.5 rounded-full bg-purple-200 hover:bg-purple-300 focus:outline-none">
@@ -161,13 +175,9 @@
                             </div>
 
                             <!-- Hidden Audio -->
-                            <audio id="audio-player" src=""></audio>
+                            <audio id="audio-player"></audio>
                         </div>
                     </div>
-
-
-
-
 
                     <!-- Playlist Container -->
                     <div
@@ -180,7 +190,8 @@
                                         class="song-item flex justify-between gap-x-6 py-5 hover:scale-105 transition-transform duration-300 hover:shadow-xl rounded-lg block px-3"
                                         data-name="{{ $song->name }}" data-artist="{{ $song->artist_name }}"
                                         data-image="{{ asset($song->image_path ?? 'images/song-icon.png') }}"
-                                        data-audio="{{ asset('songs/' . $song->file_name) }}">
+                                        data-audio="{{ asset($song->file_path) }}">
+
 
 
                                         <div class="flex min-w-0 gap-x-4">
@@ -223,42 +234,117 @@
         const playerArtist = document.getElementById('player-artist');
         const audioPlayer = document.getElementById('audio-player');
         const playBtn = document.getElementById('play-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
 
+
+        let currentSongIndex = -1;
         let isPlaying = false;
 
-        songItems.forEach(song => {
+        function loadSong(index) {
+            const song = songItems[index];
+            if (!song) return;
+
+            // Fade animation for image
+            playerImage.classList.add('fade-out');
+            setTimeout(() => {
+                playerImage.src = song.dataset.image;
+                playerImage.classList.remove('fade-out');
+                playerImage.classList.add('fade-in');
+                setTimeout(() => playerImage.classList.remove('fade-in'), 400);
+            }, 200);
+
+            // Update name & artist
+            playerName.textContent = song.dataset.name;
+            playerArtist.textContent = "by " + song.dataset.artist;
+
+            // Load and play the song
+            audioPlayer.src = song.dataset.audio;
+            audioPlayer.play();
+            isPlaying = true;
+            currentSongIndex = index;
+
+            // Update play button icon to pause
+            document.getElementById('play-icon').innerHTML = `
+            <path d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2C7.88562 2 8.82843 2 9.41421 2.58579C10 3.17157 10 4.11438 10 6V18C10 19.8856 10 20.8284 9.41421 21.4142C8.82843 22 7.88562 22 6 22C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V6Z"
+                fill="#000000"></path>
+            <path d="M14 6C14 4.11438 14 3.17157 14.5858 2.58579C15.1716 2 16.1144 2 18 2C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6V18C22 19.8856 22 20.8284 21.4142 21.4142C20.8284 22 19.8856 22 18 22C16.1144 22 15.1716 22 14.5858 21.4142C14 20.8284 14 19.8856 14 18V6Z"
+                fill="#000000"></path>`;
+        }
+
+        // Click a song in playlist
+        songItems.forEach((song, index) => {
             song.addEventListener('click', e => {
                 e.preventDefault();
-
-                // update UI
-                playerImage.classList.add('fade-out');
-
-                setTimeout(() => {
-                    playerImage.src = song.dataset.image;
-                    playerImage.classList.remove('fade-out');
-                    playerImage.classList.add('fade-in');
-
-                    // Remove the fade-in after the animation completes
-                    setTimeout(() => playerImage.classList.remove('fade-in'), 400);
-                }, 200);
-                playerName.textContent = song.dataset.name;
-                playerArtist.textContent = "by " + song.dataset.artist;
-
-                // update audio
-                audioPlayer.src = song.dataset.audio;
-                audioPlayer.play();
-                isPlaying = true;
+                loadSong(index);
             });
         });
 
+        // Play / Pause button
         playBtn.addEventListener('click', () => {
             if (!audioPlayer.src) return;
+
+            const playIcon = document.getElementById('play-icon');
+
             if (isPlaying) {
                 audioPlayer.pause();
+                // Change to play icon
+                playIcon.innerHTML = `
+                <path d="M16.6598 14.6474C18.4467 13.4935 18.4467 10.5065 16.6598 9.35258L5.87083 2.38548C4.13419 1.26402 2 2.72368 2 5.0329V18.9671C2 21.2763 4.13419 22.736 5.87083 21.6145L16.6598 14.6474Z"
+                    fill="#000000"></path>`;
             } else {
                 audioPlayer.play();
+                // Change to pause icon
+                playIcon.innerHTML = `
+                <path d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2C7.88562 2 8.82843 2 9.41421 2.58579C10 3.17157 10 4.11438 10 6V18C10 19.8856 10 20.8284 9.41421 21.4142C8.82843 22 7.88562 22 6 22C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V6Z"
+                    fill="#000000"></path>
+                <path d="M14 6C14 4.11438 14 3.17157 14.5858 2.58579C15.1716 2 16.1144 2 18 2C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6V18C22 19.8856 22 20.8284 21.4142 21.4142C20.8284 22 19.8856 22 18 22C16.1144 22 15.1716 22 14.5858 21.4142C14 20.8284 14 19.8856 14 18V6Z"
+                    fill="#000000"></path>`;
             }
+
             isPlaying = !isPlaying;
         });
+
+        // Previous song
+        prevBtn.addEventListener('click', () => {
+            if (currentSongIndex > 0) loadSong(currentSongIndex - 1);
+        });
+
+        // Next song
+        nextBtn.addEventListener('click', () => {
+            if (currentSongIndex < songItems.length - 1) loadSong(currentSongIndex + 1);
+        });
+
+        // Auto-play next when a song ends
+        audioPlayer.addEventListener('ended', () => {
+            if (currentSongIndex < songItems.length - 1) loadSong(currentSongIndex + 1);
+        });
+
+        // Update progress bar as the song plays
+        audioPlayer.addEventListener('timeupdate', () => {
+            if (audioPlayer.duration) {
+                const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+            }
+        });
+
+        // Allow clicking on progress bar to seek
+        progressContainer.addEventListener('click', (e) => {
+            const duration = audioPlayer.duration;
+
+            // Prevent seeking if song isn't loaded yet
+            if (!duration || isNaN(duration)) return;
+
+            const width = progressContainer.clientWidth;
+            const clickX = e.offsetX;
+            const newTime = (clickX / width) * duration;
+
+            // Seek smoothly
+            audioPlayer.currentTime = newTime;
+        });
+
+
     });
 </script>
