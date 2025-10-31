@@ -114,14 +114,13 @@
                             <!-- Album Cover -->
                             <div
                                 class="w-36 h-36 rounded-full overflow-hidden flex justify-center items-center bg-gray-700">
-                                <img id="player-image" src="https://telegra.ph/file/2acfcad8d39e49d95addd.jpg"
+                                <img id="player-image" src=""
                                     class="fade-image w-full h-full object-cover rounded-full aspect-square" />
                             </div>
 
-
                             <!-- Song Info -->
                             <p class="text-center mt-1">
-                                <span id="player-name" class="text-pink text-md font-semibold">Name</span>
+                                <span id="player-name" class="text-pink text-md font-semibold"></span><br>
                                 <span id="player-artist" class="text-white text-xs"></span>
                             </p>
 
@@ -151,13 +150,11 @@
                                     class="p-2 rounded-full bg-purple-200 hover:bg-purple-300 focus:outline-none mx-2">
                                     <svg id="play-icon" viewBox="0 0 24 24" class="w-3.5 h-3.5 text-white-600"
                                         fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <!-- Default: Play Icon -->
                                         <path
                                             d="M16.6598 14.6474C18.4467 13.4935 18.4467 10.5065 16.6598 9.35258L5.87083 2.38548C4.13419 1.26402 2 2.72368 2 5.0329V18.9671C2 21.2763 4.13419 22.736 5.87083 21.6145L16.6598 14.6474Z"
                                             fill="#000000"></path>
                                     </svg>
                                 </button>
-
 
                                 <button id="next-btn"
                                     class="p-1.5 rounded-full bg-purple-200 hover:bg-purple-300 focus:outline-none">
@@ -178,6 +175,7 @@
                             <audio id="audio-player"></audio>
                         </div>
                     </div>
+
 
                     <!-- Playlist Container -->
                     <div
@@ -225,126 +223,145 @@
         </div>
     </div>
 
-</x-layout>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const songItems = document.querySelectorAll('.song-item');
-        const playerImage = document.getElementById('player-image');
-        const playerName = document.getElementById('player-name');
-        const playerArtist = document.getElementById('player-artist');
-        const audioPlayer = document.getElementById('audio-player');
-        const playBtn = document.getElementById('play-btn');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const progressContainer = document.getElementById('progress-container');
-        const progressBar = document.getElementById('progress-bar');
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const songItems = document.querySelectorAll('.song-item');
+            const playerImage = document.getElementById('player-image');
+            const playerName = document.getElementById('player-name');
+            const playerArtist = document.getElementById('player-artist');
+            const audioPlayer = document.getElementById('audio-player');
+            const playBtn = document.getElementById('play-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            const songs = @json($latestSongs);
 
 
-        let currentSongIndex = -1;
-        let isPlaying = false;
 
-        function loadSong(index) {
-            const song = songItems[index];
-            if (!song) return;
+            let currentSongIndex = -1;
+            let isPlaying = false;
 
-            // Fade animation for image
-            playerImage.classList.add('fade-out');
-            setTimeout(() => {
-                playerImage.src = song.dataset.image;
-                playerImage.classList.remove('fade-out');
-                playerImage.classList.add('fade-in');
-                setTimeout(() => playerImage.classList.remove('fade-in'), 400);
-            }, 200);
+            function loadSong(index) {
+                const song = songItems[index];
+                if (!song) return;
 
-            // Update name & artist
-            playerName.textContent = song.dataset.name;
-            playerArtist.textContent = "by " + song.dataset.artist;
+                // Fade animation for image
+                playerImage.classList.add('fade-out');
+                setTimeout(() => {
+                    playerImage.src = song.dataset.image;
+                    playerImage.classList.remove('fade-out');
+                    playerImage.classList.add('fade-in');
+                    setTimeout(() => playerImage.classList.remove('fade-in'), 400);
+                }, 200);
 
-            // Load and play the song
-            audioPlayer.src = song.dataset.audio;
-            audioPlayer.play();
-            isPlaying = true;
-            currentSongIndex = index;
+                // Update name & artist
+                playerName.textContent = song.dataset.name;
+                playerArtist.textContent = "by " + song.dataset.artist;
 
-            // Update play button icon to pause
-            document.getElementById('play-icon').innerHTML = `
+                // Load and play the song
+                audioPlayer.src = song.dataset.audio;
+                audioPlayer.play();
+                isPlaying = true;
+                currentSongIndex = index;
+
+                // Update play button icon to pause
+                document.getElementById('play-icon').innerHTML = `
             <path d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2C7.88562 2 8.82843 2 9.41421 2.58579C10 3.17157 10 4.11438 10 6V18C10 19.8856 10 20.8284 9.41421 21.4142C8.82843 22 7.88562 22 6 22C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V6Z"
                 fill="#000000"></path>
             <path d="M14 6C14 4.11438 14 3.17157 14.5858 2.58579C15.1716 2 16.1144 2 18 2C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6V18C22 19.8856 22 20.8284 21.4142 21.4142C20.8284 22 19.8856 22 18 22C16.1144 22 15.1716 22 14.5858 21.4142C14 20.8284 14 19.8856 14 18V6Z"
                 fill="#000000"></path>`;
-        }
+            }
 
-        // Click a song in playlist
-        songItems.forEach((song, index) => {
-            song.addEventListener('click', e => {
-                e.preventDefault();
-                loadSong(index);
+            // Click a song in playlist
+            songItems.forEach((song, index) => {
+                song.addEventListener('click', e => {
+                    e.preventDefault();
+                    loadSong(index);
+                });
             });
-        });
 
-        // Play / Pause button
-        playBtn.addEventListener('click', () => {
-            if (!audioPlayer.src) return;
+            // Play / Pause button
+            playBtn.addEventListener('click', () => {
+                if (!audioPlayer.src) return;
 
-            const playIcon = document.getElementById('play-icon');
+                const playIcon = document.getElementById('play-icon');
 
-            if (isPlaying) {
-                audioPlayer.pause();
-                // Change to play icon
-                playIcon.innerHTML = `
+                if (isPlaying) {
+                    audioPlayer.pause();
+                    // Change to play icon
+                    playIcon.innerHTML = `
                 <path d="M16.6598 14.6474C18.4467 13.4935 18.4467 10.5065 16.6598 9.35258L5.87083 2.38548C4.13419 1.26402 2 2.72368 2 5.0329V18.9671C2 21.2763 4.13419 22.736 5.87083 21.6145L16.6598 14.6474Z"
                     fill="#000000"></path>`;
-            } else {
-                audioPlayer.play();
-                // Change to pause icon
-                playIcon.innerHTML = `
+                } else {
+                    audioPlayer.play();
+                    // Change to pause icon
+                    playIcon.innerHTML = `
                 <path d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2C7.88562 2 8.82843 2 9.41421 2.58579C10 3.17157 10 4.11438 10 6V18C10 19.8856 10 20.8284 9.41421 21.4142C8.82843 22 7.88562 22 6 22C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V6Z"
                     fill="#000000"></path>
                 <path d="M14 6C14 4.11438 14 3.17157 14.5858 2.58579C15.1716 2 16.1144 2 18 2C19.8856 2 20.8284 2 21.4142 2.58579C22 3.17157 22 4.11438 22 6V18C22 19.8856 22 20.8284 21.4142 21.4142C20.8284 22 19.8856 22 18 22C16.1144 22 15.1716 22 14.5858 21.4142C14 20.8284 14 19.8856 14 18V6Z"
                     fill="#000000"></path>`;
-            }
+                }
 
-            isPlaying = !isPlaying;
+                isPlaying = !isPlaying;
+            });
+
+            // Previous song
+            prevBtn.addEventListener('click', () => {
+                if (currentSongIndex > 0) loadSong(currentSongIndex - 1);
+            });
+
+            // Next song
+            nextBtn.addEventListener('click', () => {
+                if (currentSongIndex < songItems.length - 1) loadSong(currentSongIndex + 1);
+            });
+
+            // Auto-play next when a song ends
+            audioPlayer.addEventListener('ended', () => {
+                if (currentSongIndex < songItems.length - 1) loadSong(currentSongIndex + 1);
+            });
+
+            // Update progress bar as the song plays
+            audioPlayer.addEventListener('timeupdate', () => {
+                if (audioPlayer.duration) {
+                    const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                    progressBar.style.width = `${progressPercent}%`;
+                }
+            });
+
+            // Allow clicking on progress bar to seek
+            progressContainer.addEventListener('click', (e) => {
+                const duration = audioPlayer.duration;
+
+                // Prevent seeking if song isn't loaded yet
+                if (!duration || isNaN(duration)) return;
+
+                const width = progressContainer.clientWidth;
+                const clickX = e.offsetX;
+                const newTime = (clickX / width) * duration;
+
+                // Seek smoothly
+                audioPlayer.currentTime = newTime;
+            });
+
+            if (songs.length === 0) return;
+
+            // Take the first song
+            const firstSong = songs[0];
+
+            // Update the UI
+            playerName.textContent = firstSong.name;
+            playerArtist.textContent = firstSong.artist ?? ''; // optional
+            playerImage.src = firstSong.image_path
+                ? `/images/songs/${firstSong.image_path}`
+                : '/images/default.jpg';
+
+            // Set the audio source
+            audioPlayer.src = `/audio/audio/${firstSong.file_name}`;
+
+
         });
 
-        // Previous song
-        prevBtn.addEventListener('click', () => {
-            if (currentSongIndex > 0) loadSong(currentSongIndex - 1);
-        });
-
-        // Next song
-        nextBtn.addEventListener('click', () => {
-            if (currentSongIndex < songItems.length - 1) loadSong(currentSongIndex + 1);
-        });
-
-        // Auto-play next when a song ends
-        audioPlayer.addEventListener('ended', () => {
-            if (currentSongIndex < songItems.length - 1) loadSong(currentSongIndex + 1);
-        });
-
-        // Update progress bar as the song plays
-        audioPlayer.addEventListener('timeupdate', () => {
-            if (audioPlayer.duration) {
-                const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-                progressBar.style.width = `${progressPercent}%`;
-            }
-        });
-
-        // Allow clicking on progress bar to seek
-        progressContainer.addEventListener('click', (e) => {
-            const duration = audioPlayer.duration;
-
-            // Prevent seeking if song isn't loaded yet
-            if (!duration || isNaN(duration)) return;
-
-            const width = progressContainer.clientWidth;
-            const clickX = e.offsetX;
-            const newTime = (clickX / width) * duration;
-
-            // Seek smoothly
-            audioPlayer.currentTime = newTime;
-        });
-
-
-    });
-</script>
+    </script>
+</x-layout>
