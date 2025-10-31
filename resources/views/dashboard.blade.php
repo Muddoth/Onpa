@@ -3,7 +3,7 @@
         transform: scale(1.5);
     }
 
-    .status-cards{
+    .status-cards {
         transform: scale(0.9);
     }
 
@@ -25,10 +25,24 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
         background-color: #db2777;
         /* Tailwind pink-600 */
+
+
+    }
+
+    .fade-image {
+        transition: opacity 0.4s ease-in-out;
+    }
+
+    .fade-out {
+        opacity: 0;
+    }
+
+    .fade-in {
+        opacity: 1;
     }
 </style>
 
-<x-layout title="Dashboard Page">
+<x-layout title="Dashboard">
     @slot('headerButton')
     <a href="{{ route('songs.create') }}"
         class="bg-teal-500 hover:bg-teal-500 text-white font-semibold px-4 py-2 rounded-lg transition">
@@ -80,25 +94,32 @@
 
     <!-- Music Player Card -->
     <div class="w-full pb-20">
-        <div class='bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-700 flex w-11/12  overflow-hidden mx-auto mb-10'>
+        <div
+            class='bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-700 flex w-11/12  overflow-hidden mx-auto mb-10'>
             <div class="flex flex-col w-full">
 
                 <div class="flex flex-col sm:flex-row items-center">
                     <!-- Music Card-->
-                    <div class="p-8 bg-transparent  flex rounded-lg justify-center items-center h-fit music-card">
-                        <div class="p-2 rounded-lg  w-40">
+                    <div class="p-10 bg-transparent flex rounded-lg justify-center items-center h-fit music-card">
+                        <div class="p-2 rounded-lg w-40">
                             <!-- Album Cover -->
-                            <img src="https://telegra.ph/file/2acfcad8d39e49d95addd.jpg"
-                                alt="idk - Highvyn, Taylor Shin"
-                                class="w-32 h-32 mx-auto rounded-lg mb-2 shadow-teal-50">
-                            <!-- Song Title -->
-                            <p class="text-center">
-                                <span class="text-pink text-md font-semibold">Name</span>
-                                <span class="text-white text-xs">by Artist</span>
-                            </p>
+                            <div
+                                class="w-36 h-36 rounded-full overflow-hidden flex justify-center items-center bg-gray-700">
+                                <img id="player-image" src="https://telegra.ph/file/2acfcad8d39e49d95addd.jpg"
+                                    class="fade-image w-full h-full object-cover rounded-full aspect-square" />
+                            </div>
 
+
+                            <!-- Song Info -->
+                            <p class="text-center mt-1">
+                                <span id="player-name" class="text-pink text-md font-semibold">Name</span>
+                                <span id="player-artist" class="text-white text-xs">by Artist</span>
+                            </p>
+                            <!-- Controls -->
                             <div class="mt-3 flex justify-center items-center">
-                                <button class="p-1.5 rounded-full bg-purple-200 hover:bg-purple-300 focus:outline-none">
+                                <button id="prev-btn"
+                                    class="p-1.5 rounded-full bg-purple-200 hover:bg-purple-300 focus:outline-none">
+                                    <!-- previous SVG -->
                                     <svg viewBox="0 0 24 24" class="w-2.5 h-2.5 text-white-600" fill="none"
                                         xmlns="http://www.w3.org/2000/svg" transform="matrix(-1, 0, 0, 1, 0, 0)">
                                         <path
@@ -110,8 +131,9 @@
                                     </svg>
                                 </button>
 
-                                <button
+                                <button id="play-btn"
                                     class="p-2 rounded-full bg-purple-200 hover:bg-purple-300 focus:outline-none mx-2">
+                                    <!-- play SVG -->
                                     <svg viewBox="0 0 24 24" class="w-3.5 h-3.5 text-white-600" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -123,7 +145,9 @@
                                     </svg>
                                 </button>
 
-                                <button class="p-1.5 rounded-full bg-purple-200 hover:bg-purple-300 focus:outline-none">
+                                <button id="next-btn"
+                                    class="p-1.5 rounded-full bg-purple-200 hover:bg-purple-300 focus:outline-none">
+                                    <!-- next SVG -->
                                     <svg viewBox="0 0 24 24" class="w-2.5 h-2.5 text-white-600" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -135,32 +159,34 @@
                                     </svg>
                                 </button>
                             </div>
-                            <!-- Progress Bar -->
-                            <div class="mt-3 bg-gray-200 h-1 rounded-full">
-                                <div class="bg-teal-500 h-1 rounded-full w-1/2"></div>
-                            </div>
-                            <!-- Time Info -->
-                            <div class="flex justify-between mt-1 text-xs text-white">
-                                <span>1:57</span>
-                                <span>3:53</span>
-                            </div>
+
+                            <!-- Hidden Audio -->
+                            <audio id="audio-player" src=""></audio>
                         </div>
                     </div>
 
 
 
+
+
                     <!-- Playlist Container -->
-                    <div class="flex flex-col w-full h-96 overflow-y-auto overflow-x-hidden custom-scrollbar">
+                    <div
+                        class="flex flex-col w-full h-96 overflow-y-auto overflow-x-hidden custom-scrollbar ml-auto px-10">
+
                         <ul role="list" class="divide-y divide-white/5">
                             @foreach ($latestSongs as $song)
                                 <li>
-                                    <a href="{{ route('songs.show', $song->id) }}"
-                                        class="flex justify-between gap-x-6 py-5 hover:scale-105 transition-transform duration-300 hover:shadow-xl rounded-lg block px-3">
+                                    <a href="javascript:void(0);"
+                                        class="song-item flex justify-between gap-x-6 py-5 hover:scale-105 transition-transform duration-300 hover:shadow-xl rounded-lg block px-3"
+                                        data-name="{{ $song->name }}" data-artist="{{ $song->artist_name }}"
+                                        data-image="{{ asset($song->image_path ?? 'images/song-icon.png') }}"
+                                        data-audio="{{ asset('songs/' . $song->file_name) }}">
+
+
                                         <div class="flex min-w-0 gap-x-4">
-                                            
+
                                             <img src="{{ asset($song->image_path ?? 'images/song-icon.png') }}"
-                                                alt="Song Icon"
-                                                class="w-20 h-20 object-cover rounded-full bg-gray-700" />
+                                                alt="Song Icon" class="w-20 h-20 object-cover rounded-full bg-gray-700" />
                                             <div class="min-w-0 flex-auto">
                                                 <p>
                                                     <span
@@ -189,3 +215,50 @@
     </div>
 
 </x-layout>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const songItems = document.querySelectorAll('.song-item');
+        const playerImage = document.getElementById('player-image');
+        const playerName = document.getElementById('player-name');
+        const playerArtist = document.getElementById('player-artist');
+        const audioPlayer = document.getElementById('audio-player');
+        const playBtn = document.getElementById('play-btn');
+
+        let isPlaying = false;
+
+        songItems.forEach(song => {
+            song.addEventListener('click', e => {
+                e.preventDefault();
+
+                // update UI
+                playerImage.classList.add('fade-out');
+
+                setTimeout(() => {
+                    playerImage.src = song.dataset.image;
+                    playerImage.classList.remove('fade-out');
+                    playerImage.classList.add('fade-in');
+
+                    // Remove the fade-in after the animation completes
+                    setTimeout(() => playerImage.classList.remove('fade-in'), 400);
+                }, 200);
+                playerName.textContent = song.dataset.name;
+                playerArtist.textContent = "by " + song.dataset.artist;
+
+                // update audio
+                audioPlayer.src = song.dataset.audio;
+                audioPlayer.play();
+                isPlaying = true;
+            });
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (!audioPlayer.src) return;
+            if (isPlaying) {
+                audioPlayer.pause();
+            } else {
+                audioPlayer.play();
+            }
+            isPlaying = !isPlaying;
+        });
+    });
+</script>
