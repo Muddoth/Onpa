@@ -30,6 +30,6 @@ Route::get('/profiles', [ProfileController::class, 'index'])->name('profiles.ind
 Route::get('/profiles/edit', [ProfileController::class, 'edit'])->name('profiles.edit');
 Route::post('/profiles/update', [ProfileController::class, 'update'])->name('profiles.update');
 
-Route::get('/record', function () {
-    return view('record');
-})->name('record');
+Route::get('/playlist', function () {
+    return view('playlist');
+})->name('playlist');

@@ -19,4 +19,8 @@ class Song extends Model
         'file_path',
         'image_path'
     ];
+    public function playlists()
+    {
+        return $this->belongsToMany(Playlist::class, 'playlist_song');
+    }
 }

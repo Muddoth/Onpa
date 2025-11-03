@@ -41,9 +41,9 @@
                 User Profile
             </a>
 
-            <a href="{{ route('record') }}"
-                class="transition {{ request()->routeIs('record') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
-                Record Mode
+            <a href="{{ route('playlist') }}"
+                class="transition {{ request()->routeIs('playlist') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
+                Playlist
             </a>
         </nav>
 

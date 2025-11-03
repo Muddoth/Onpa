@@ -107,6 +107,7 @@
             class='bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-700 flex w-11/12  overflow-hidden mx-auto mb-10'>
             <div class="flex flex-col w-full">
 
+
                 <div class="flex flex-col sm:flex-row items-center">
                     <!-- Music Card-->
                     <div class="p-10 bg-transparent flex rounded-lg justify-center items-center h-fit music-card">
@@ -180,7 +181,7 @@
                     <!-- Playlist Container -->
                     <div
                         class="flex flex-col w-full h-96 overflow-y-auto overflow-x-hidden custom-scrollbar ml-auto px-10">
-
+                        <h2 class="bold text-white text-2xl">Recently Added</h2>
                         <ul role="list" class="divide-y divide-white/5">
                             @foreach ($latestSongs as $song)
                                 <li>
@@ -212,6 +213,12 @@
                                 </li>
                             @endforeach
                         </ul>
+                        <a href="{{ route('songs.index') }}"
+                            class="text-pink-400 hover:text-pink-300 hover:underline hover:-translate-y-1 transform font-semibold self-end mt-4 transition-all duration-300">
+                            Other Songs >>
+                        </a>
+
+
                     </div>
 
                 </div>
