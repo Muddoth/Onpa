@@ -1,7 +1,7 @@
 <x-layout title="{{ $song->name }}">
     @slot('headerButton')
     <a href="{{ route('songs.edit', $song->id) }}"
-        class="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-lg m-10">
+        class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-4 py-2 rounded-lg m-10">
         Edit Song
     </a>
 
@@ -85,7 +85,7 @@
                 </div>
 
                 <!-- Audio Player -->
-                <div class="mt-4 px-5">
+                <div hidden class="mt-4 px-5">
                     <audio controls class="w-full rounded-lg">
                         <source src="{{ asset($song->file_path) }}" type="audio/mpeg">
                     </audio>

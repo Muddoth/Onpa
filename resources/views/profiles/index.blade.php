@@ -24,7 +24,19 @@
                     class="inline-block mt-4 px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded-lg text-sm font-semibold">
                     Edit Profile
                 </a>
+
+                <form id="form-delete" action="{{ route('profiles.delete', $profile->id) }}" method="POST"
+                    class="inline-block mt-4">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit"
+                        class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm font-semibold">
+                        Delete Profile
+                    </button>
+                </form>
+
             </div>
+
         </div>
     </div>
 </x-layout>

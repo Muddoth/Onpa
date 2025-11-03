@@ -54,7 +54,7 @@
 <x-layout title="Dashboard">
     @slot('headerButton')
     <a href="{{ route('songs.create') }}"
-        class="bg-teal-500 hover:bg-teal-500 text-white font-semibold px-4 py-2 rounded-lg transition">
+        class="bg-cyan-500 hover:bg-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition">
         Add Song
     </a>
 
@@ -80,7 +80,7 @@
             class="bg-gray-800 rounded-2xl shadow-lg p-6 hover:scale-105 transition-transform duration-300 hover:shadow-xl border border-gray-700 p-6 flex justify-between items-center">
             <div>
                 <h2 class="text-white text-sm uppercase">Total Playlist</h2>
-                <p class="text-3xl font-bold text-pink-500">{{ $totalSongs }}</p>
+                <p class="text-3xl font-bold text-pink-500">{{ $totalPlaylists }}</p>
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-400" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">

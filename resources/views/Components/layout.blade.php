@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Onpa Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    @stack('styles')
+
 </head>
 
 <style>
@@ -41,8 +43,8 @@
                 User Profile
             </a>
 
-            <a href="{{ route('playlist') }}"
-                class="transition {{ request()->routeIs('playlist') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
+            <a href="{{ route('playlists.index') }}"
+                class="transition {{ request()->routeIs('playlists.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
                 Playlist
             </a>
         </nav>
@@ -52,7 +54,7 @@
 
 
     <!-- Main Content -->
-    <main class="flex-1 p-8 ml-[20%]"> <!-- shift right by sidebar width -->
+    <main class="flex-1 p-8 ml-[20%] "> <!-- shift right by sidebar width -->
         <!-- Header Bar -->
         <div
             class="bg-gray-900 border-b border-gray-700 p-4 mb-8 flex justify-between items-center fixed top-0 left-[20%] w-[80%] z-50">
@@ -69,6 +71,8 @@
             {{ $slot }}
         </div>
     </main>
+    @stack('scripts')
+
 
 </body>
 

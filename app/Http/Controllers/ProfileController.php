@@ -45,4 +45,12 @@ class ProfileController extends Controller
 
         return redirect()->route('profiles.index')->with('success', 'Profile updated successfully!');
     }
+
+    public function destroy($id)
+    {
+        $profile = Profile::findOrFail($id);
+        $profile->delete();
+
+        return redirect()->route('profiles.index')->with('success', 'Profile deleted successfully.');
+    }
 }
