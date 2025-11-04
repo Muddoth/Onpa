@@ -6,8 +6,41 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PlaylistController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Auth\RegisterController;
+
+
+
 
 Route::get('/', function () {
+
+    return view('base');
+})->name('base');
+
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/profiles', [ProfileController::class, 'store'])->name('profiles.store');
+
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::resource('profiles', ProfileController::class);
+});
+
+Route::middleware(['role:admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+});
+
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+
+Route::get('/dashboard', function () {
     $totalSongs = Song::count();
     $totalGenres = Song::distinct('genre')->count('genre');
     $totalPlaylists = Playlist::count();
@@ -27,11 +60,16 @@ Route::prefix('songs')->controller(SongController::class)->group(function () {
     Route::get('/{id}', 'show')->name('songs.show');
 });
 
-Route::prefix('profiles')->name('profiles.')->group(function () {
-    Route::get('/', [ProfileController::class, 'index'])->name('index');
-    Route::get('/edit', [ProfileController::class, 'edit'])->name('edit');
-    Route::post('/update', [ProfileController::class, 'update'])->name('update');
-    Route::delete('/{id}', [ProfileController::class, 'destroy'])->name('delete');
+// PROFILE CRUD
+// 🎵 SONG ROUTES
+Route::prefix('profiles')->controller(ProfileController::class)->group(function () {
+    Route::get('/', 'index')->name('profiles.index');
+    Route::get('/create', 'create')->name('profiles.create');
+    Route::post('/', 'store')->name('profiles.store');
+    Route::get('/{id}/edit', 'edit')->name('profiles.edit');
+    Route::patch('/{song}', 'update')->name('profiles.update');
+    Route::delete('/{id}', 'destroy')->name('profiles.delete');
+    Route::get('/{id}', 'show')->name('profiles.show');
 });
 
 Route::prefix('playlists')->name('playlists.')->group(function () {
@@ -43,3 +81,7 @@ Route::prefix('playlists')->name('playlists.')->group(function () {
     Route::delete('/{id}', [PlaylistController::class, 'destroy'])->name('delete');
     Route::get('/{id}', [PlaylistController::class, 'show'])->name('show');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

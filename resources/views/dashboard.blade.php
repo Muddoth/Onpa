@@ -339,6 +339,7 @@
 
             // Allow clicking on progress bar to seek
             progressContainer.addEventListener('click', (e) => {
+            
                 const duration = audioPlayer.duration;
 
                 // Prevent seeking if song isn't loaded yet

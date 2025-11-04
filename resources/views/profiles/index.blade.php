@@ -20,7 +20,7 @@
             </div>
 
             <div>
-                <a href="{{ route('profiles.edit') }}"
+                <a href="{{ route('profiles.edit', $profile->id) }}"
                     class="inline-block mt-4 px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded-lg text-sm font-semibold">
                     Edit Profile
                 </a>

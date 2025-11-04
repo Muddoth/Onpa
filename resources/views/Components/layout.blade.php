@@ -22,34 +22,45 @@
 
 
     <!-- Sidebar -->
-    <aside class="w-1/5 bg-gray-800/50 text-white min-h-screen p-6 border-gray-700 fixed">
-        <div class="flex items-center mb-10 space-x-3">
-            <img src="{{ asset('images/onpa-logo.png') }}" alt="Onpa Logo" class="w-20 h-20">
-            <h1 class="text-2xl font-bold text-pink-400">Onpa</h1>
+
+    <aside class="w-1/5 bg-gray-800/50 text-white min-h-screen p-6 border-gray-700 fixed flex flex-col justify-between">
+        <div>
+            <div class="flex items-center mb-10 space-x-3">
+                <img src="{{ asset('images/onpa-logo.png') }}" alt="Onpa Logo" class="w-20 h-20">
+                <h1 class="text-2xl font-bold text-pink-400">Onpa</h1>
+            </div>
+            <nav class="flex flex-col space-y-4 text-xl">
+                <a href="{{ route('dashboard') }}"
+                    class="transition {{ request()->routeIs('dashboard') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
+                    Dashboard
+                </a>
+
+                <a href="{{ route('songs.index') }}"
+                    class="transition {{ request()->routeIs('songs.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
+                    Songs
+                </a>
+
+                <a href="{{ route('profiles.index') }}"
+                    class="transition {{ request()->routeIs('profiles.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
+                    User Profile
+                </a>
+
+                <a href="{{ route('playlists.index') }}"
+                    class="transition {{ request()->routeIs('playlists.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
+                    Playlist
+                </a>
+            </nav>
         </div>
-        <nav class="flex flex-col space-y-4 text-xl">
-            <a href="{{ route('dashboard') }}"
-                class="transition {{ request()->routeIs('dashboard') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
-                Dashboard
-            </a>
 
-            <a href="{{ route('songs.index') }}"
-                class="transition {{ request()->routeIs('songs.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
-                Songs
-            </a>
+        <!-- Logout Button -->
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="...">Logout</button>
+        </form>
 
-            <a href="{{ route('profiles.index') }}"
-                class="transition {{ request()->routeIs('profiles.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
-                User Profile
-            </a>
-
-            <a href="{{ route('playlists.index') }}"
-                class="transition {{ request()->routeIs('playlists.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
-                Playlist
-            </a>
-        </nav>
 
     </aside>
+
 
 
 

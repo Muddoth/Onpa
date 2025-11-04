@@ -27,7 +27,7 @@
     @endslot
 
     <!-- Music Player Cards -->
-    <div class="w-full space-y-8">
+    <div class="w-full space-y-8 pb-60">
         <div class="bg-gray-800  rounded-2xl shadow-lg p-6 border border-gray-700 flex w-11/12 overflow-hidden mx-auto">
 
             <div class="flex flex-col w-full">
@@ -82,7 +82,7 @@
 
         <div class="fixed bottom-28 left-0 w-full flex justify-center z-40">
             <div class="px-4 py-2">
-                <div class="flex gap-6">
+                <div class="pagination gap-2">
                     {{ $songs->links() }}
                 </div>
             </div>

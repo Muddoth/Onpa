@@ -15,6 +15,47 @@ class ProfileController extends Controller
         return view('profiles.index', compact('profile'));
     }
 
+    public function create()
+    {
+
+        return view('profiles.create');
+    }
+
+    /**
+     * Store a new profile
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'age' => 'required|integer|min:1',
+            'gender' => 'required|string|max:50',
+            'bio' => 'nullable|string',
+            'favourite_genres' => 'nullable|string',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+        ]);
+
+        // Add user_id from logged-in user
+        $data = $request->only('name', 'age', 'gender', 'bio', 'favourite_genres');
+        $data['user_id'] = auth()->id(); // or Auth::id()
+
+        // Create the profile with user_id
+        $profile = Profile::create($data);
+
+
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            $image = $request->file('profile_picture');
+            $imageFilename = str_replace(' ', '_', $profile->name) . '.' . $image->getClientOriginalExtension();
+            $imagePath = 'images/profiles/' . $imageFilename;
+            $image->move(public_path('images/profiles'), $imageFilename);
+            $profile->update(['profile_picture' => $imagePath]);
+        }
+
+        return redirect()->route('dashboard')->with('success', 'Profile created successfully!');
+    }
+
+
     public function edit()
     {
         $profile = Profile::first();

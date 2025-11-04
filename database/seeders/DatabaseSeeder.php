@@ -19,8 +19,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(SongSeeder::class);
-        $this->call(PlaylistSeeder::class);
+        $this->call([
+            RoleSeeder::class,
+            UserProfileSeeder::class,
+            SongSeeder::class, 
+            PlaylistSeeder::class
+        ]);
+ 
+                
         
         Song::factory(10)->create();
         Profile::factory(5)->create();
