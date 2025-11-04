@@ -4,13 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Profile;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
     public function index()
     {
-        // For now, we’ll just fetch the first profile record
-        $profile = Profile::first();
+        // Get the profile related to the currently authenticated user
+        $profile = auth()->user()->profile;
+
+        // Optional: If the user has no profile yet, redirect or show a message
+        if (!$profile) {
+            return redirect()->route('profiles.create')->with('error', 'Please create your profile first.');
+        }
 
         return view('profiles.index', compact('profile'));
     }
@@ -58,13 +64,13 @@ class ProfileController extends Controller
 
     public function edit()
     {
-        $profile = Profile::first();
+        $profile = auth()->user()->profile;
         return view('profiles.edit', compact('profile'));
     }
 
     public function update(Request $request)
     {
-        $profile = Profile::first();
+        $profile = auth()->user()->profile;
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -89,9 +95,16 @@ class ProfileController extends Controller
 
     public function destroy($id)
     {
-        $profile = Profile::findOrFail($id);
-        $profile->delete();
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+        $profile = $user->profile;
 
-        return redirect()->route('profiles.index')->with('success', 'Profile deleted successfully.');
+        if ($profile) {
+            $profile->delete();
+        }
+
+        $user->delete();
+
+        return redirect()->route('base')->with('success', 'Profile and user deleted successfully.');
     }
 }

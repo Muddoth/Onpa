@@ -2,13 +2,14 @@
 
 use App\Models\Song;
 use App\Models\Playlist;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SongController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PlaylistController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
 
@@ -61,13 +62,13 @@ Route::prefix('songs')->controller(SongController::class)->group(function () {
 });
 
 // PROFILE CRUD
-// 🎵 SONG ROUTES
 Route::prefix('profiles')->controller(ProfileController::class)->group(function () {
     Route::get('/', 'index')->name('profiles.index');
     Route::get('/create', 'create')->name('profiles.create');
     Route::post('/', 'store')->name('profiles.store');
+    
+    Route::patch('/{id}', 'update')->name('profiles.update');
     Route::get('/{id}/edit', 'edit')->name('profiles.edit');
-    Route::patch('/{song}', 'update')->name('profiles.update');
     Route::delete('/{id}', 'destroy')->name('profiles.delete');
     Route::get('/{id}', 'show')->name('profiles.show');
 });

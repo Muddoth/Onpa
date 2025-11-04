@@ -3,8 +3,10 @@
     <div class="max-w-lg mx-auto mt-10 bg-gray-800 text-white p-8 rounded-xl shadow-lg">
         <h2 class="text-2xl font-semibold text-pink-400 mb-6">Edit Profile</h2>
 
-        <form action="{{ route('profiles.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+        <form action="{{ route('profiles.update', $profile->id) }}" method="POST" enctype="multipart/form-data"
+            class="space-y-4">
             @csrf
+            @method('PATCH')
 
             <div>
                 <label class="block text-sm font-medium">Name</label>

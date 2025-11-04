@@ -23,13 +23,11 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserProfileSeeder::class,
             SongSeeder::class, 
+            TagSeeder::class,
             PlaylistSeeder::class
         ]);
  
-                
-        
-        Song::factory(10)->create();
         Profile::factory(5)->create();
-        Tag::factory(9)->create();
+        
     }
 }
