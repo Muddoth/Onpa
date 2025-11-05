@@ -1,6 +1,7 @@
 <x-layoutlanding>
 
-    <form action="{{ route('profiles.store') }}" method="POST" enctype="multipart/form-data" class="mx-auto space-y-4">
+    <form action="{{ route('profiles.store') }}" method="POST" enctype="multipart/form-data"
+        class="max-w-md mx-auto bg-gray-900 bg-opacity-70 rounded-3xl p-10 shadow-lg space-y-6 m-20">
         @csrf
 
         <!-- Profile Information -->

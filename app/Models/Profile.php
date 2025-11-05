@@ -23,4 +23,9 @@ class Profile extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function playlists()
+    {
+        return $this->hasMany(Playlist::class);
+    }
 }

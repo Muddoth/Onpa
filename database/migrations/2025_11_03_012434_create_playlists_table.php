@@ -16,6 +16,7 @@ return new class extends Migration
         //Playlist Table
         Schema::create('playlists', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('profile_id')->constrained()->onDelete('cascade')->nullable(); // 👈 add this
             $table->string('name');
             $table->text('description')->nullable();
             $table->timestamps();

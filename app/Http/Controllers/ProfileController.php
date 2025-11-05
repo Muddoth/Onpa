@@ -10,16 +10,17 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        // Get the profile related to the currently authenticated user
-        $profile = auth()->user()->profile;
-
-        // Optional: If the user has no profile yet, redirect or show a message
-        if (!$profile) {
-            return redirect()->route('profiles.create')->with('error', 'Please create your profile first.');
+        if (auth()->user()->hasRole('admin')) {
+            // Admin sees all profiles
+            $profiles = Profile::paginate(10);
+        } else {
+            // User sees only their profile
+            $profiles = auth()->user()->profile;  // Directly return a single profile
         }
 
-        return view('profiles.index', compact('profile'));
+        return view('profiles.index', compact('profiles'));
     }
+
 
     public function create()
     {
@@ -97,14 +98,30 @@ class ProfileController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = auth()->user();
-        $profile = $user->profile;
 
-        if ($profile) {
+        // Find the profile by ID
+        $profile = Profile::findOrFail($id);
+
+        // Check if the logged-in user is an admin
+        if ($user->hasRole('admin')) {
+            // Admin can delete any profile
             $profile->delete();
+
+            // Optionally, delete the user as well (if needed)
+            $profile->user->delete();
+
+            return redirect()->route('profiles.index')->with('success', 'Profile deleted successfully!');
         }
 
-        $user->delete();
+        // If the logged-in user is not an admin, check if they own the profile
+        if ($profile->user_id === $user->id) {
+            // User can only delete their own profile
+            $profile->delete();
+            $user->delete();  // Delete the user as well, since it's tied to the profile
 
-        return redirect()->route('base')->with('success', 'Profile and user deleted successfully.');
+            return redirect()->route('base')->with('success', 'Profile and user deleted successfully.');
+        }
+
+        return redirect()->route('profiles.index')->with('error', 'You cannot delete this profile.');
     }
 }

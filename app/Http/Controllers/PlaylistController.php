@@ -13,9 +13,18 @@ class PlaylistController extends Controller
      */
     public function index()
     {
-        $playlists = Playlist::with('songs')->latest()->simplePaginate(10);
+        // If user has 'admin' role → show all playlists
+        if (auth()->user()->hasRole('admin')) {
+            $playlists = Playlist::simplePaginate(10);
+        }
+        // Otherwise (regular user) → show only their own playlists
+        else {
+            $playlists = auth()->user()->profile->playlists()->simplePaginate(10);
+        }
+
         return view('playlists.index', compact('playlists'));
     }
+
 
     /**
      * Show the form for creating a new playlist.

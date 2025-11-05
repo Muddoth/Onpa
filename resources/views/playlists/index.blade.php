@@ -1,7 +1,7 @@
-<x-layout title="Playlists">
+<x-layout title="Playlist">
     @slot('headerButton')
     <a href="{{ route('playlists.create') }}"
-        class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-4 py-2 rounded-lg">
+        class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg">
         Create Playlist
     </a>
     @endslot
@@ -13,7 +13,7 @@
                 <div class="bg-gray-800 border border-gray-700 rounded-2xl shadow-md p-5 hover:shadow-xl transition relative group cursor-pointer"
                     onclick="window.location='{{ route('playlists.show', $playlist->id) }}'">
                     <div class="flex justify-between items-center">
-                        <h2 class="text-xl font-semibold text-pink-400 truncate">
+                        <h2 class="text-xl font-semibold text-purple-400 truncate">
                             {{ $playlist->name }}
                         </h2>
                     </div>

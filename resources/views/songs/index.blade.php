@@ -14,16 +14,16 @@
     #musicPlayer {
         backdrop-filter: blur(10px);
     }
-
 </style>
 
 <x-layout title="Songs Page">
     @slot('headerButton')
+    @role('admin')
     <a href="{{ route('songs.create') }}"
         class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg">
         Create Song
     </a>
-
+    @endrole
     @endslot
 
     <!-- Music Player Cards -->
@@ -54,20 +54,30 @@
                             </div>
 
                             <!-- Right side: Buttons -->
-                            <div class="flex gap-3">
+                            <div class="flex gap-3 items-center">
                                 <a href="{{ route('songs.show', $song->id) }}"
-                                    class="px-4 py-1.5 text-sm font-medium rounded-lg bg-purple-500 hover:bg-purple-600 text-white shadow-md transition duration-200">
+                                    class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium rounded-lg bg-purple-500 hover:bg-purple-600 text-white shadow-md transition duration-200">
                                     View
                                 </a>
+
+                                @role('admin')
                                 <a href="{{ route('songs.edit', $song->id) }}"
-                                    class="px-4 py-1.5 text-white text-sm font-medium rounded-lg bg-cyan-400 hover:bg-cyan-500 text-gray-900 shadow-md transition duration-200">
+                                    class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium rounded-lg bg-pink-400 hover:bg-pink-500 text-white shadow-md transition duration-200">
                                     Edit
                                 </a>
-                                <a href="{{ route('songs.delete', $song->id) }}"
-                                    class="px-4 py-1.5 text-white text-sm font-medium rounded-lg bg-red-500 hover:bg-red-600 text-gray-900 shadow-md transition duration-200">
-                                    Delete
-                                </a>
+
+                                <form action="{{ route('songs.delete', $song->id) }}" method="POST"
+                                    onsubmit="return confirm('Delete this song?');" class="pt-4 align-middle">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md transition duration-200">
+                                        Delete
+                                    </button>
+                                </form>
+                                @endrole
                             </div>
+
                         </li>
 
 
@@ -80,20 +90,20 @@
             </div>
         </div>
 
-        <div class="fixed bottom-28 left-0 w-full flex justify-center z-40">
-            <div class="px-4 py-2">
-                <div class="pagination gap-2">
-                    {{ $songs->links() }}
-                </div>
+        
+        
+    </div>
+    
+    <div class="fixed bottom-28 left-0 w-full flex justify-center z-40">
+        <div class="px-4 py-2">
+            <div class="pagination gap-2">
+                {{ $songs->links() }}
             </div>
         </div>
-
-
     </div>
-
     <x-music-player />
-
-
-
+    
+    
+    
 
 </x-layout>

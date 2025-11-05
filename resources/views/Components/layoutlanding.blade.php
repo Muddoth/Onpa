@@ -21,7 +21,7 @@
 
 <body class="bg-gray-900 text-white">
 
-    {{-- 🌸 HEADER SECTION --}}
+    {{-- HEADER SECTION --}}
     <header class="fixed top-0 left-0 w-full bg-gray-800/80 backdrop-blur-md border-b border-gray-700 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             {{-- Logo + Name --}}
@@ -48,7 +48,7 @@
     <main class="pt-32 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div
             class="relative isolate overflow-hidden bg-gray-800 px-6 pt-16 sm:rounded-3xl sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0 after:pointer-events-none after:absolute after:inset-0 after:inset-ring after:inset-ring-white/10">
-            
+
             {{-- Background Glow SVG --}}
             <svg viewBox="0 0 1024 1024" aria-hidden="true"
                 class="absolute top-1/2 left-1/2 -z-10 w-[512px] -translate-y-1/2 sm:left-full sm:-ml-80 lg:left-1/2 lg:-translate-x-1/2 lg:translate-y-0">
@@ -61,7 +61,18 @@
                 </defs>
             </svg>
 
-            {{ $slot }}
+            {{-- Text Section --}}
+            <div class="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
+
+                {{ $slot }}
+            </div>
+
+
+            {{-- Image Section --}}
+            <div class="relative mt-16 h-80 lg:mt-8">
+                <img src="" alt="App screenshot"
+                    class="absolute top-0 left-0 w-full max-w-none rounded-md bg-white/5 ring-1 ring-white/10" />
+            </div>
         </div>
     </main>
 

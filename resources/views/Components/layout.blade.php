@@ -25,10 +25,20 @@
 
     <aside class="w-1/5 bg-gray-800/50 text-white min-h-screen p-6 border-gray-700 fixed flex flex-col justify-between">
         <div>
-            <div class="flex items-center mb-10 space-x-3">
+            <div class="flex items-center mb-3 space-x-3">
                 <img src="{{ asset('images/onpa-logo.png') }}" alt="Onpa Logo" class="w-20 h-20">
                 <h1 class="text-2xl font-bold text-pink-400">Onpa</h1>
             </div>
+            {{-- Dashboard Title --}}
+            @if(auth()->user()->hasRole('admin'))
+                <h2 class="text-lg font-semibold text-cyan-100 mb-3">Admin Dashboard</h2>
+            @else
+                <h2 class="text-lg font-semibold text-cyan-300 mb-3">
+                    {{ auth()->user()->name }}'s Dashboard
+                </h2>
+            @endif
+            <div class="border mt-2 mb-10 w-full border-cyan-300"></div>
+
             <nav class="flex flex-col space-y-4 text-xl">
                 <a href="{{ route('dashboard') }}"
                     class="transition {{ request()->routeIs('dashboard') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
@@ -56,7 +66,7 @@
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition
-           focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 ">
+           focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 ml-10">
                 Logout
             </button>
 
