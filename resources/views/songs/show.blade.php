@@ -1,17 +1,21 @@
 <x-layout title="{{ $song->name }}">
     @slot('headerButton')
-    <a href="{{ route('songs.edit', $song->id) }}"
-        class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-4 py-2 rounded-lg m-10">
-        Edit Song
-    </a>
+    @can('update', $song)
+        <a href="{{ route('songs.edit', $song->id) }}"
+            class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-4 py-2 rounded-lg m-10">
+            Edit Song
+        </a>
+    @endcan
 
-    <form id="delete-form" action="{{ route('songs.delete', $song->id) }}" method="POST" class="inline">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="bg-red-700 hover:bg-red-800 text-white font-semibold px-4 py-2 rounded-lg">
-            Delete Song
-        </button>
-    </form>
+    @can('delete', $song)
+        <form id="delete-form" action="{{ route('songs.delete', $song->id) }}" method="POST" class="inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="bg-red-700 hover:bg-red-800 text-white font-semibold px-4 py-2 rounded-lg">
+                Delete Song
+            </button>
+        </form>
+    @endcan
     @endslot
 
     <div class="w-full">

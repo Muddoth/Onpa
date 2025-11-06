@@ -84,6 +84,9 @@ class SongController extends Controller
      */
     public function update(Request $request, Song $song)
     {
+        // 🔒 Check authorization using the SongPolicy
+        $this->authorize('update', $song);
+
         // validate - allow artist/album/genre to be nullable if you want
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -140,13 +143,15 @@ class SongController extends Controller
     }
 
 
-
     /**
      * Delete a song
      */
     public function destroy($id)
     {
         $song = Song::findOrFail($id);
+        
+        // 🔒 Check authorization using the SongPolicy
+        $this->authorize('delete', $song);
 
         if ($song->image_path && file_exists(public_path($song->image_path))) {
             unlink(public_path($song->image_path));

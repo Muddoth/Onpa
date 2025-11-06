@@ -18,12 +18,12 @@
 
 <x-layout title="Songs Page">
     @slot('headerButton')
-    @role('admin')
-    <a href="{{ route('songs.create') }}"
-        class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg">
-        Create Song
-    </a>
-    @endrole
+        @can('create songs')
+        <a href="{{ route('songs.create') }}"
+            class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg">
+            Create Song
+        </a>
+        @endcan
     @endslot
 
     <!-- Music Player Cards -->
@@ -60,12 +60,14 @@
                                     View
                                 </a>
 
-                                @role('admin')
+                                @can('update', $song)
                                 <a href="{{ route('songs.edit', $song->id) }}"
                                     class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium rounded-lg bg-pink-400 hover:bg-pink-500 text-white shadow-md transition duration-200">
                                     Edit
                                 </a>
+                                @endcan
 
+                                @can('delete', $song)
                                 <form action="{{ route('songs.delete', $song->id) }}" method="POST"
                                     onsubmit="return confirm('Delete this song?');" class="pt-4 align-middle">
                                     @csrf
@@ -75,7 +77,7 @@
                                         Delete
                                     </button>
                                 </form>
-                                @endrole
+                                @endcan
                             </div>
 
                         </li>
