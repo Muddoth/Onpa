@@ -12,7 +12,7 @@ class PlaylistSeeder extends Seeder
     public function run(): void
     {
         // Find the test user by email
-        $testUser = User::where('email', 'test@example.com')->first();
+        $testUser = User::where('email', 'listener@example.com')->first();
 
         if (!$testUser) {
             echo "Test user not found. Please create the test user first.\n";
