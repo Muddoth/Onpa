@@ -40,21 +40,22 @@ class PlaylistController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
-            'song_ids' => 'nullable|array', // from checkboxes or multiselect
-            'song_ids.*' => 'exists:songs,id',
+            'songs' => 'array',
+            'songs.*' => 'exists:songs,id',
         ]);
 
-        $playlist = Playlist::create([
-            'name' => $validated['name'],
+        $playlist = auth()->user()->profile->playlists()->create([
+            'name' => $request->name,
+            'description' => $request->description,
         ]);
 
-        if (!empty($validated['song_ids'])) {
-            $playlist->songs()->sync($validated['song_ids']);
+        if ($request->filled('songs')) {
+            $playlist->songs()->attach($request->songs);
         }
 
-        return redirect()->route('playlists.index')->with('success', 'Playlist created successfully.');
+        return redirect()->route('playlists.index')->with('success', 'Playlist created successfully!');
     }
 
     /**
@@ -79,7 +80,7 @@ class PlaylistController extends Controller
     /**
      * Update the specified playlist in storage.
      */
-    public function update(Request $request, Playlist $song) // 'song' because of your route param name
+    public function update(Request $request, Playlist $playlist)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -87,12 +88,12 @@ class PlaylistController extends Controller
             'song_ids.*' => 'exists:songs,id',
         ]);
 
-        $song->update(['name' => $validated['name']]);
+        $playlist->update(['name' => $validated['name']]);
 
         if (!empty($validated['song_ids'])) {
-            $song->songs()->sync($validated['song_ids']);
+            $playlist->songs()->sync($validated['song_ids']);
         } else {
-            $song->songs()->detach();
+            $playlist->songs()->detach();
         }
 
         return redirect()->route('playlists.index')->with('success', 'Playlist updated successfully.');

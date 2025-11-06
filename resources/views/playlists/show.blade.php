@@ -19,10 +19,22 @@
 <x-layout title="{{ $playlist->name }}">
     @slot('headerButton')
 
-    <a href="{{ route('playlists.create') }}"
-        class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg">
-        Create Playlist
-    </a>
+    <div>
+        <a href="{{ route('playlists.edit', $playlist->id) }}"
+            class="mx-2 text-white inline-block mt-4 px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded-lg text-sm font-semibold">
+            Edit Playlist
+        </a>
+
+        <form id="form-delete" action="{{ route('playlists.delete', $playlist->id) }}" method="POST"
+            class="inline-block mt-4">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="mx-2 text-white px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm font-semibold">
+                Delete Playlist
+            </button>
+        </form>
+
+    </div>
 
     @endslot
 
@@ -32,7 +44,7 @@
 
             <div class="flex flex-col w-full">
                 <ul role="list" class="divide-y divide-white/5">
-                    
+
                     @forelse ($playlist->songs as $song)
                         <li class="song-item flex justify-between items-center gap-x-6 py-5 hover:scale-105 transition-transform duration-300 hover:shadow-xl rounded-lg px-3 border-b border-gray-700"
                             data-audio="{{ asset($song->file_path) }}" data-name="{{ $song->name }}"

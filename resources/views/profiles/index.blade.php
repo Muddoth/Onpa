@@ -1,9 +1,11 @@
 <x-layout title="Profile Page">
-        @slot('headerButton')
+    @slot('headerButton')
+    @role('admin')
     <a href="{{ route('profiles.create') }}"
         class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg">
         Create User
     </a>
+    @endrole
 
     @endslot
     @if(auth()->user()->hasRole('admin'))
@@ -49,8 +51,8 @@
     @else
         <div class="max-w-md p-8 sm:flex sm:space-x-6 bg-gray-800 text-white rounded-xl shadow-lg mx-auto mt-10">
             <div class="flex-shrink-0 w-full mb-6 h-44 sm:h-32 sm:w-32 sm:mb-0">
-                <img src="{{ asset($profiles->profile_picture ?? 'images/default-avatar.png') }}" alt="{{ $profiles->name }}"
-                    class="object-cover object-center w-full h-full rounded-lg bg-gray-700">
+                <img src="{{ asset($profiles->profile_picture ?? 'images/default-avatar.png') }}"
+                    alt="{{ $profiles->name }}" class="object-cover object-center w-full h-full rounded-lg bg-gray-700">
             </div>
 
             <div class="flex flex-col space-y-4">
