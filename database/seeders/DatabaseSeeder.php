@@ -26,8 +26,6 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,
             PlaylistSeeder::class
         ]);
- 
-        Profile::factory(5)->create();
-        
+         
     }
 }
