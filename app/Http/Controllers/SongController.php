@@ -21,9 +21,14 @@ class SongController extends Controller
      */
     public function create()
     {
-        $genres = Song::select('genre')
-            ->distinct()
-            ->pluck('genre');
+        $rawGenres = Song::pluck('genre'); // collection of json strings
+
+        $genres = $rawGenres
+            ->filter() // remove nulls
+            ->flatMap(fn($item) => $item)
+            ->unique()
+            ->sort()
+            ->values();
 
         return view('songs.create', compact('genres'));
     }
@@ -37,12 +42,18 @@ class SongController extends Controller
             'name' => 'required|string|max:255',
             'artist_name' => 'nullable|string|max:255',
             'album' => 'nullable|string|max:255',
-            'genre' => 'nullable|string|max:255',
+            'genres' => 'nullable|array',
+            'genres.*' => 'string|max:255',
             'audio' => 'required|mimes:mp3,wav,ogg|max:10240',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 
-        $song = Song::create($request->only('name', 'artist_name', 'album', 'genre'));
+        $data = $request->only('name', 'artist_name', 'album');
+
+        // Encode genres array as JSON (or null if empty)
+        $data['genre'] = $request->input('genres', null);
+
+        $song = Song::create($data);
 
         // Handle audio
         if ($request->hasFile('audio')) {
@@ -71,10 +82,14 @@ class SongController extends Controller
     public function edit($id)
     {
         $song = Song::findOrFail($id);
-        $genres = Song::select('genre')
-            ->distinct()
-            ->pluck('genre');
+        $rawGenres = Song::pluck('genre');
 
+        $genres = $rawGenres
+            ->filter()
+            ->flatMap(fn($item) => $item)
+            ->unique()
+            ->sort()
+            ->values();
 
         return view('songs.edit', compact('song', 'genres'));
     }
@@ -92,7 +107,8 @@ class SongController extends Controller
             'name' => 'required|string|max:255',
             'artist_name' => 'nullable|string|max:255',
             'album' => 'nullable|string|max:255',
-            'genre' => 'nullable|string|max:100',
+            'genres' => 'nullable|array',
+            'genres.*' => 'string|max:255',
             'audio' => 'nullable|mimes:mp3,wav,ogg|file|max:20480',
             'image' => 'nullable|image|mimes:jpg,jpeg,png|file|max:5120',
         ]);
@@ -102,7 +118,7 @@ class SongController extends Controller
             'name' => $validated['name'],
             'artist_name' => $validated['artist_name'] ?? $song->artist_name,
             'album' => $validated['album'] ?? $song->album,
-            'genre' => $validated['genre'] ?? $song->genre,
+            'genre' => $request->input('genres', $song->genre),
         ];
 
         // handle audio upload (replace existing and update DB path)
@@ -149,7 +165,7 @@ class SongController extends Controller
     public function destroy($id)
     {
         $song = Song::findOrFail($id);
-        
+
         // 🔒 Check authorization using the SongPolicy
         $this->authorize('delete', $song);
 

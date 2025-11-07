@@ -1,6 +1,7 @@
 <x-layout title="Edit Song">
     <div class="vw-80%">
-        <form action="{{ route('songs.update', $song->id) }}" method="POST" enctype="multipart/form-data" class="mx-auto space-y-4">
+        <form action="{{ route('songs.update', $song->id) }}" method="POST" enctype="multipart/form-data"
+            class="mx-auto space-y-4">
             @csrf
             @method('PATCH')
 
@@ -14,8 +15,7 @@
                     <div class="sm:col-span-1">
                         <label for="name" class="block text-sm/6 font-medium text-white">Song Name</label>
                         <div class="mt-2">
-                            <input type="text" name="name" id="name"
-                                value="{{ old('name', $song->name) }}"
+                            <input type="text" name="name" id="name" value="{{ old('name', $song->name) }}"
                                 class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white placeholder:text-gray-500 focus:outline-2 focus:outline-indigo-500 sm:text-sm/6" />
                         </div>
                         @error('name')
@@ -40,8 +40,7 @@
                     <div class="sm:col-span-1">
                         <label for="album" class="block text-sm/6 font-medium text-white">Album</label>
                         <div class="mt-2">
-                            <input type="text" name="album" id="album"
-                                value="{{ old('album', $song->album) }}"
+                            <input type="text" name="album" id="album" value="{{ old('album', $song->album) }}"
                                 class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white placeholder:text-gray-500 focus:outline-2 focus:outline-indigo-500 sm:text-sm/6" />
                         </div>
                         @error('album')
@@ -51,21 +50,36 @@
 
                     <!-- Genre -->
                     <div class="sm:col-span-1">
-                        <label for="genre" class="block text-sm/6 font-medium text-white">Genre</label>
-                        <div class="mt-2">
-                            <select name="genre" id="genre"
-                                class="block w-full rounded-md bg-gray-800 px-3 py-1.5 text-base text-white focus:outline-2 focus:outline-indigo-500 sm:text-sm/6">
-                                @foreach ($genres as $genre)
-                                    <option value="{{ $genre }}" {{ old('genre', $song->genre) == $genre ? 'selected' : '' }}>
+                        <label class="block text-sm/6 font-medium text-white mb-1">Genre</label>
+
+                        <div class="flex flex-wrap gap-2 mt-2">
+
+                            @foreach ($genres as $genre)
+                                @php
+                                    // Determine if this pill should be pre-selected
+                                    $isChecked = in_array($genre, old('genres', $song->genre ?? []));
+                                @endphp
+
+                                <label
+                                    class="cursor-pointer select-none rounded-full border px-4 py-1.5 text-white transition-colors duration-200 ease-in-out
+                                {{ $isChecked ? 'bg-purple-900 border-purple-900' : 'bg-purple-500 border-purple-500' }}
+                                hover:bg-purple-600 focus-within:ring-2 focus-within:ring-purple-400">
+                                    <input type="checkbox" name="genres[]" value="{{ $genre }}"
+                                        class="sr-only peer" {{ $isChecked ? 'checked' : '' }} />
+
+                                    <span class="peer-checked:bg-purple-900 peer-checked:border-purple-900">
                                         {{ $genre }}
-                                    </option>
-                                @endforeach
-                            </select>
+                                    </span>
+                                </label>
+                            @endforeach
+
                         </div>
-                        @error('genre')
+
+                        @error('genres')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
 
                     <!-- Audio File -->
                     <div class="sm:col-span-1">

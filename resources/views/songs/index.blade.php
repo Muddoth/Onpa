@@ -48,7 +48,7 @@
                                         <span class="text-lg font-semibold text-purple-500">{{ $song->name }}</span>
                                         <span class="text-sm text-white"> by {{ $song->artist_name }}</span>
                                     </p>
-                                    <p class="mt-1 truncate text-xs text-white">{{ $song->genre }}</p>
+                                    <p class="mt-1 truncate text-xs text-white">{{ is_array($song->genre) ? implode(', ', $song->genre) : ($song->genre ?? '') }}</p>
                                     <p class="text-sm text-white">Album: {{ $song->album }}</p>
                                 </div>
                             </div>

@@ -33,13 +33,13 @@ class SongSeeder extends Seeder
             // Fallback if no matching image
             $imagePath = $imageMatch
                 ? 'images/songs/' . basename($imageMatch)
-                : 'images/song-icon.png';
+                : 'images/onpa-logo.png';
 
             Song::create([
                 'name' => $songName,
                 'artist_name' => $faker->name(),
                 'album' => $faker->words(2, true),
-                'genre' => $faker->randomElement(['Pop', 'Rock', 'Hip Hop', 'Jazz', 'Classical', 'Electronic']),
+                'genre' => [$faker->randomElement(['Pop', 'Rock', 'Hip Hop', 'Jazz', 'Classical', 'Electronic'])],
                 'file_path' => 'audio/' . $audioFile,
                 'image_path' => $imagePath,
             ]);

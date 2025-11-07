@@ -44,22 +44,36 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-
                     <!-- Genre -->
                     <div class="sm:col-span-1">
-                        <label for="genre" class="block text-sm/6 font-medium text-white">Genre</label>
-                        <div class="mt-2">
-                            <select name="genre" id="genre"
-                                class="block w-full rounded-md bg-gray-800 px-3 py-1.5 text-base text-white focus:outline-2 focus:outline-indigo-500 sm:text-sm/6">
-                                @foreach ($genres as $genre)
-                                    <option value="{{ $genre }}">{{ $genre }}</option>
-                                @endforeach
-                            </select>
+                        <label class="block text-sm/6 font-medium text-white mb-1">Genre</label>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            @foreach ($genres as $genre)
+                                <label
+                                    class="cursor-pointer select-none rounded-full border border-purple-900 bg-purple-500 px-4 py-1.5 text-white transition-colors duration-200 ease-in-out
+                                    hover:bg-purple-600
+                                    peer-checked:bg-purple-900 peer-checked:border-purple-900
+                                    focus-within:ring-2 focus-within:ring-purple-400"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        name="genres[]"
+                                        value="{{ $genre }}"
+                                        class="sr-only peer"
+                                    />
+                                    <span
+                                        class="peer-checked:bg-purple-900 peer-checked:border-purple-900"
+                                    >
+                                        {{ $genre }}
+                                    </span>
+                                </label>
+                            @endforeach
                         </div>
-                        @error('genre')
+                        @error('genres')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
 
                     <!-- Audio File -->
                     <div class="sm:col-span-1">

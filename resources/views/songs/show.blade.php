@@ -36,7 +36,7 @@
                             — "{{ $song->album }}" by {{ $song->artist_name }}
                         </span>
                         <span class="text-xs text-gray-500 uppercase font-medium mt-1">
-                            Genre: {{ $song->genre }}
+                            Genre: {{ is_array($song->genre) ? implode(', ', $song->genre) : $song->genre }}
                         </span>
                     </div>
                 </div>

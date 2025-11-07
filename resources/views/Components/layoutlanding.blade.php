@@ -62,17 +62,18 @@
             </svg>
 
             {{-- Text Section --}}
-            <div class="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
+            <div class="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left lg:w-1/2">
 
                 {{ $slot }}
             </div>
 
 
             {{-- Image Section --}}
-            <div class="relative mt-16 h-80 lg:mt-8">
-                <img src="" alt="App screenshot"
-                    class="absolute top-0 left-0 w-full max-w-none rounded-md bg-white/5 ring-1 ring-white/10" />
-            </div>
+            {{-- <div class="relative mt-16 h-auto lg:mt-8 lg:flex-none lg:w-1/2">
+                <img src="/images/App_Screenshot.png" alt="App screenshot"
+                    class="w-full rounded-md bg-white/5 ring-1 ring-white/10" />
+            </div> --}}
+
         </div>
     </main>
 

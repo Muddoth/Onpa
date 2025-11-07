@@ -4,7 +4,7 @@
 
         <!-- Song Info -->
         <div class="flex items-center space-x-4">
-            <img id="playerImage" src="{{ asset('images/song-icon.png') }}" alt="Album Cover"
+            <img id="playerImage" src="{{ asset('images/onpa-logo.png') }}" alt="Album Cover"
                 class="w-16 h-16 rounded-lg object-cover bg-gray-200 dark:bg-slate-700" />
             <div>
                 <h3 id="playerTitle" class="text-white text-sm font-semibold">No song playing</h3>

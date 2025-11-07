@@ -19,8 +19,14 @@ class Song extends Model
         'file_path',
         'image_path'
     ];
+
+    protected $casts = [
+        'genre' => 'array',
+    ];
+
     public function playlists()
     {
         return $this->belongsToMany(Playlist::class, 'playlist_song');
     }
+
 }

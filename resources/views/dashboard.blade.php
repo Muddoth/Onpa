@@ -53,12 +53,12 @@
 
 <x-layout title="Dashboard">
     @slot('headerButton')
-    <a href="{{ route('songs.create') }}"
-        class="bg-cyan-500 hover:bg-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition">
-        Add Song
-    </a>
-
-
+        @can('create songs')
+            <a href="{{ route('songs.create') }}"
+                class="bg-cyan-500 hover:bg-cyan-500 text-white font-semibold px-4 py-2 rounded-lg transition">
+                Add Song
+            </a>
+        @endcan
     @endslot
 
 
@@ -203,7 +203,7 @@
                                                         class="text-lg font-semibold text-purple-500">{{ $song->name }}</span>
                                                     <span class="text-sm text-white"> by {{ $song->artist_name }}</span>
                                                 </p>
-                                                <p class="mt-1 truncate text-xs/5 text-white">{{ $song->genre }}</p>
+                                                <p class="mt-1 truncate text-xs/5 text-white">{{ implode(', ', $song->genre) }}</p>
                                             </div>
                                         </div>
                                         <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
@@ -362,7 +362,7 @@
             playerName.textContent = firstSong.name;
             playerArtist.textContent = firstSong.artist ?? ''; // optional
             playerImage.src = firstSong.image_path
-                ? `/images/songs/${firstSong.image_path}`
+                ? `/${firstSong.image_path}`
                 : '/images/default.jpg';
 
             // Set the audio source
