@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Song;
+use App\Models\Artist;
 use Illuminate\Http\Request;
 
 class SongController extends Controller
@@ -10,10 +11,26 @@ class SongController extends Controller
     /** 
      * Display all songs
      */
-    public function index()
+    public function index(Request $request)
     {
-        $songs = Song::latest()->simplePaginate(10);
-        return view('songs.index', compact('songs'));
+        $genre = $request->input('genre', 'all');
+
+        $songs = Song::with('artist')->ofGenre($genre)
+            ->latest()
+            ->simplePaginate(10);
+
+
+        // Extract all genres from the songs table
+        $rawGenres = Song::pluck('genre');
+
+        $genres = $rawGenres
+            ->filter() // remove nulls
+            ->flatMap(fn($item) => $item) // flatten arrays of genres
+            ->unique()
+            ->sort()
+            ->values();
+
+        return view('songs.index', compact('songs', 'genres', 'genre'));
     }
 
     /**
@@ -40,7 +57,7 @@ class SongController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'artist_name' => 'nullable|string|max:255',
+            'artist_id' => 'required|exists:artists,id',
             'album' => 'nullable|string|max:255',
             'genres' => 'nullable|array',
             'genres.*' => 'string|max:255',
@@ -48,11 +65,10 @@ class SongController extends Controller
             'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 
-        $data = $request->only('name', 'artist_name', 'album');
-
+        $data = $request->only('name', 'album');
         // Encode genres array as JSON (or null if empty)
         $data['genre'] = $request->input('genres', null);
-
+        $data['artist_id'] = $request->input('artist_id');
         $song = Song::create($data);
 
         // Handle audio
@@ -81,7 +97,8 @@ class SongController extends Controller
      */
     public function edit($id)
     {
-        $song = Song::findOrFail($id);
+        $song = Song::with('artist')->findOrFail($id);
+        $artists = Artist::all();
         $rawGenres = Song::pluck('genre');
 
         $genres = $rawGenres
@@ -91,7 +108,7 @@ class SongController extends Controller
             ->sort()
             ->values();
 
-        return view('songs.edit', compact('song', 'genres'));
+        return view('songs.edit', compact('song', 'genres', 'artists'));
     }
 
     /**
@@ -105,7 +122,7 @@ class SongController extends Controller
         // validate - allow artist/album/genre to be nullable if you want
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'artist_name' => 'nullable|string|max:255',
+            'artist_id' => 'required|exists:artists,id',
             'album' => 'nullable|string|max:255',
             'genres' => 'nullable|array',
             'genres.*' => 'string|max:255',
@@ -116,10 +133,11 @@ class SongController extends Controller
         // start with the fields we know we want to update
         $data = [
             'name' => $validated['name'],
-            'artist_name' => $validated['artist_name'] ?? $song->artist_name,
+            'artist_id' => $request->input('artist_id', $song->artist_id),
             'album' => $validated['album'] ?? $song->album,
             'genre' => $request->input('genres', $song->genre),
         ];
+
 
         // handle audio upload (replace existing and update DB path)
         if ($request->hasFile('audio')) {
@@ -182,7 +200,7 @@ class SongController extends Controller
      */
     public function show($id)
     {
-        $song = Song::findOrFail($id);
+        $song = Song::with('artist')->findOrFail($id);
         return view('songs.show', compact('song'));
     }
 }

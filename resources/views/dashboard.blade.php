@@ -187,7 +187,7 @@
                                 <li>
                                     <a href="javascript:void(0);"
                                         class="song-item flex justify-between gap-x-6 py-5 hover:scale-105 transition-transform duration-300 hover:shadow-xl rounded-lg block px-3"
-                                        data-name="{{ $song->name }}" data-artist="{{ $song->artist_name }}"
+                                        data-name="{{ $song->name }}" data-artist="{{ $song->artist->name }}"
                                         data-image="{{ asset($song->image_path ?? 'images/song-icon.png') }}"
                                         data-audio="{{ asset($song->file_path) }}">
 
@@ -201,7 +201,7 @@
                                                 <p>
                                                     <span
                                                         class="text-lg font-semibold text-purple-500">{{ $song->name }}</span>
-                                                    <span class="text-sm text-white"> by {{ $song->artist_name }}</span>
+                                                    <span class="text-sm text-white"> by {{ $song->artist->name }}</span>
                                                 </p>
                                                 <p class="mt-1 truncate text-xs/5 text-white">{{ implode(', ', $song->genre) }}</p>
                                             </div>

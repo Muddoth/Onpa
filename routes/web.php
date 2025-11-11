@@ -77,3 +77,8 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/counter', function(){
+
+    return view('counter');
+})->name('counter');

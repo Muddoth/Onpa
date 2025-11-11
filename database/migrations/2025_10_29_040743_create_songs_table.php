@@ -17,10 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('image_path')->nullable();
-            $table->string('artist_name')->nullable();
             $table->string('album')->nullable();
             $table->json('genre')->nullable(); // <-- change here
             $table->string('file_path')->nullable();
+            $table->foreignId('artist_id')
+                ->nullable()
+                ->constrained('artists')
+                ->onDelete('cascade');
             $table->softDeletes(); // Adds a nullable 'deleted_at' TIMESTAMP column
             $table->timestamps();  // Adds 'created_at' and 'updated_at'
 

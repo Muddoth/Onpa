@@ -19,12 +19,28 @@
 <x-layout title="Songs Page">
     @slot('headerButton')
         @can('create songs')
-        <a href="{{ route('songs.create') }}"
-            class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg">
-            Create Song
-        </a>
+            <a href="{{ route('songs.create') }}"
+                class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg">
+                Create Song
+            </a>
         @endcan
     @endslot
+
+    <!--Genre Loops-->
+    <div class="genre-filters flex flex-wrap gap-3 mb-6 justify-center">
+        <button data-genre="all"
+            class="genre-btn px-4 py-2 rounded-full text-white hover:bg-indigo-700 {{ $genre === 'all' ? 'bg-indigo-600' : 'bg-gray-600' }}">
+            All
+        </button>
+
+        @foreach ($genres as $g)
+            <button data-genre="{{ $g }}"
+                class="genre-btn px-4 py-2 rounded-full text-white hover:bg-gray-700 {{ $genre === $g ? 'bg-indigo-600' : 'bg-gray-600' }}">
+                {{ $g }}
+            </button>
+        @endforeach
+    </div>
+
 
     <!-- Music Player Cards -->
     <div class="w-full space-y-8 pb-60">
@@ -35,7 +51,7 @@
                     @forelse ($songs as $song)
                         <li class="song-item flex justify-between items-center gap-x-6 py-5 hover:scale-105 transition-transform duration-300 hover:shadow-xl rounded-lg px-3 border-b border-gray-700"
                             data-audio="{{ asset($song->file_path) }}" data-name="{{ $song->name }}"
-                            data-artist="{{ $song->artist_name }}"
+                            data-artist="{{ $song->artist->name }}"
                             data-image="{{ asset($song->image_path ?? 'images/song-icon.png') }}">
 
                             <!-- Left side: Song details -->
@@ -46,9 +62,11 @@
                                 <div class="min-w-0">
                                     <p>
                                         <span class="text-lg font-semibold text-purple-500">{{ $song->name }}</span>
-                                        <span class="text-sm text-white"> by {{ $song->artist_name }}</span>
+                                        <span class="text-sm text-white"> by {{ $song->artist->name }}</span>
                                     </p>
-                                    <p class="mt-1 truncate text-xs text-white">{{ is_array($song->genre) ? implode(', ', $song->genre) : ($song->genre ?? '') }}</p>
+                                    <p class="mt-1 truncate text-xs text-white">
+                                        {{ is_array($song->genre) ? implode(', ', $song->genre) : $song->genre ?? '' }}
+                                    </p>
                                     <p class="text-sm text-white">Album: {{ $song->album }}</p>
                                 </div>
                             </div>
@@ -61,22 +79,22 @@
                                 </a>
 
                                 @can('update', $song)
-                                <a href="{{ route('songs.edit', $song->id) }}"
-                                    class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium rounded-lg bg-pink-400 hover:bg-pink-500 text-white shadow-md transition duration-200">
-                                    Edit
-                                </a>
+                                    <a href="{{ route('songs.edit', $song->id) }}"
+                                        class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium rounded-lg bg-pink-400 hover:bg-pink-500 text-white shadow-md transition duration-200">
+                                        Edit
+                                    </a>
                                 @endcan
 
                                 @can('delete', $song)
-                                <form action="{{ route('songs.delete', $song->id) }}" method="POST"
-                                    onsubmit="return confirm('Delete this song?');" class="pt-4 align-middle">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md transition duration-200">
-                                        Delete
-                                    </button>
-                                </form>
+                                    <form action="{{ route('songs.delete', $song->id) }}" method="POST"
+                                        onsubmit="return confirm('Delete this song?');" class="pt-4 align-middle">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="inline-flex items-center justify-center px-4 py-1.5 text-sm font-medium rounded-lg bg-red-500 hover:bg-red-600 text-white shadow-md transition duration-200">
+                                            Delete
+                                        </button>
+                                    </form>
                                 @endcan
                             </div>
 
@@ -92,10 +110,10 @@
             </div>
         </div>
 
-        
-        
+
+
     </div>
-    
+
     <div class="fixed bottom-28 left-0 w-full flex justify-center z-40">
         <div class="px-4 py-2">
             <div class="pagination gap-2">
@@ -104,8 +122,15 @@
         </div>
     </div>
     <x-music-player />
-    
-    
-    
+    <script>
+        document.querySelectorAll('.genre-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const genre = button.getAttribute('data-genre');
+                const url = new URL(window.location);
+                url.searchParams.set('genre', genre);
+                window.location = url.toString();
+            });
+        });
+    </script>
 
 </x-layout>

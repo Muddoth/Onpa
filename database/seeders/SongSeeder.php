@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Song;
+use App\Models\Artist;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 
 class SongSeeder extends Seeder
 {
@@ -13,6 +14,9 @@ class SongSeeder extends Seeder
         $audioFolder = public_path('audio');
         $imageFolder = public_path('images/songs');
         $faker = Faker::create();
+
+        $artistNames = ['Adele', 'Coldplay', 'Beyoncé', 'The Weeknd'];
+        $artists = collect($artistNames)->map(fn($name) => Artist::firstOrCreate(['name' => $name]));
 
         $audioFiles = collect(scandir($audioFolder))
             ->filter(fn($f) => !in_array($f, ['.', '..']) && pathinfo($f, PATHINFO_EXTENSION) === 'mp3')
@@ -35,9 +39,12 @@ class SongSeeder extends Seeder
                 ? 'images/songs/' . basename($imageMatch)
                 : 'images/onpa-logo.png';
 
+            $artist = $artists->random();
+
+
             Song::create([
                 'name' => $songName,
-                'artist_name' => $faker->name(),
+                'artist_id' => $artist->id, // ✅ link song → artist
                 'album' => $faker->words(2, true),
                 'genre' => [$faker->randomElement(['Pop', 'Rock', 'Hip Hop', 'Jazz', 'Classical', 'Electronic'])],
                 'file_path' => 'audio/' . $audioFile,

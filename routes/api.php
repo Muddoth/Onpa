@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// routes/api.php
+Route::get('/message', function () {
+    return response()->json(['message' => 'Hello from API']);
+});
+
+Route::get('/songs', [App\Http\Controllers\SongApiController::class, 'index']);
+
+

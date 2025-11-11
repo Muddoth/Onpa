@@ -13,7 +13,7 @@ class Song extends Model
 
     protected $fillable = [
         'name',
-        'artist_name',
+        'artist_id',
         'album',
         'genre',
         'file_path',
@@ -24,9 +24,22 @@ class Song extends Model
         'genre' => 'array',
     ];
 
+    public function scopeOfGenre($query, $genre)
+    {
+        if ($genre === 'all' || empty($genre)) {
+            return $query;
+        }
+
+        // Use JSON_CONTAINS for MySQL JSON column to check if genre exists in JSON array
+        return $query->whereJsonContains('genre', $genre);
+    }
+
     public function playlists()
     {
         return $this->belongsToMany(Playlist::class, 'playlist_song');
     }
-
+    public function artist()
+    {
+        return $this->belongsTo(Artist::class);
+    }
 }

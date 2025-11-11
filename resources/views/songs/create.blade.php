@@ -21,17 +21,32 @@
                         @enderror
                     </div>
 
-                    <!-- Artist Name -->
+                    @php
+                        $user = Auth::user();
+                        $isArtist = $user && $user->role === 'artist';
+                        $artistName = $isArtist ? $user->profile->name : old('artist_name', '');
+                    @endphp
+
+
+                    <!-- Artist Select -->
                     <div class="sm:col-span-1">
-                        <label for="artist_name" class="block text-sm/6 font-medium text-white">Artist Name</label>
+                        <label for="artist_id" class="block text-sm/6 font-medium text-white">Artist</label>
                         <div class="mt-2">
-                            <input type="text" name="artist_name" id="artist_name"
-                                class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white placeholder:text-gray-500 focus:outline-2 focus:outline-indigo-500 sm:text-sm/6" />
+                            <select name="artist_id" id="artist_id"
+                                class="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white placeholder:text-gray-500 focus:outline-2 focus:outline-indigo-500 sm:text-sm/6">
+                                @foreach ($artists as $artist)
+                                    <option value="{{ $artist->id }}"
+                                        {{ old('artist_id', $song->artist_id ?? '') == $artist->id ? 'selected' : '' }}>
+                                        {{ $artist->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
-                        @error('artist_name')
+                        @error('artist_id')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+
 
                     <!-- Album -->
                     <div class="sm:col-span-1">
@@ -53,17 +68,10 @@
                                     class="cursor-pointer select-none rounded-full border border-purple-900 bg-purple-500 px-4 py-1.5 text-white transition-colors duration-200 ease-in-out
                                     hover:bg-purple-600
                                     peer-checked:bg-purple-900 peer-checked:border-purple-900
-                                    focus-within:ring-2 focus-within:ring-purple-400"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        name="genres[]"
-                                        value="{{ $genre }}"
-                                        class="sr-only peer"
-                                    />
-                                    <span
-                                        class="peer-checked:bg-purple-900 peer-checked:border-purple-900"
-                                    >
+                                    focus-within:ring-2 focus-within:ring-purple-400">
+                                    <input type="checkbox" name="genres[]" value="{{ $genre }}"
+                                        class="sr-only peer" />
+                                    <span class="peer-checked:bg-purple-900 peer-checked:border-purple-900">
                                         {{ $genre }}
                                     </span>
                                 </label>
