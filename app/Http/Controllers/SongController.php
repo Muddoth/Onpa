@@ -15,23 +15,22 @@ class SongController extends Controller
     {
         $genre = $request->input('genre', 'all');
 
-        $songs = Song::with('artist')->ofGenre($genre)
+        $songs = Song::with('artist')
+            ->when($genre !== 'all', fn($q) => $q->whereJsonContains('genre', $genre))
             ->latest()
-            ->simplePaginate(10);
+            ->paginate(10);
 
-
-        // Extract all genres from the songs table
         $rawGenres = Song::pluck('genre');
-
         $genres = $rawGenres
-            ->filter() // remove nulls
-            ->flatMap(fn($item) => $item) // flatten arrays of genres
+            ->filter()
+            ->flatMap(fn($item) => $item)
             ->unique()
             ->sort()
             ->values();
 
         return view('songs.index', compact('songs', 'genres', 'genre'));
     }
+
 
     /**
      * Show the form for creating a new song

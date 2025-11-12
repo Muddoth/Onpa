@@ -1,1 +1,29 @@
 import './bootstrap';
+import { createApp } from "vue";
+import SongSearch from "./components/SongSearch.vue";
+import SongList from "./components/SongList.vue";
+
+createApp({
+    components: { SongSearch, SongList },
+    data() {
+        return {
+            songs: [],
+            genres: [],  // pass this down to SongSearch in blade
+        };
+    },
+    methods: {
+        async fetchSongs(filters = {}) {
+            const params = new URLSearchParams(filters);
+            const res = await fetch(`/api/songs?${params.toString()}`);
+            const data = await res.json();
+            this.songs = [...data.data];
+            this.genres = data.genres || [];
+
+            console.log("Fetched songs in parent:", this.songs);
+        }
+    },
+    mounted() {
+        this.fetchSongs();
+    },
+    
+}).mount("#songs-app");
