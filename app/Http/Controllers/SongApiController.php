@@ -10,7 +10,8 @@ class SongApiController extends Controller
 {
     public function index(Request $request)
     {
-
+        
+        $user=$request->user();
         $query = Song::query();
 
         if ($request->has('q') && $request->q !== '') {
@@ -27,13 +28,18 @@ class SongApiController extends Controller
             $query->whereJsonContains('genre', $request->genre);
         }
 
-        $sql = $query->toSql();
-        $bindings = $query->getBindings();
-        $count = $query->count();
+        // $sql = $query->toSql();
+        // $bindings = $query->getBindings();
+        // $count = $query->count();
 
         $songs = $query->with('artist')->paginate(10);
 
         return response()->json([
+
+            'user' => $user ? $user->only('id', 'name', 'email') : null,
+            'roles' => $user ? $user->getRoleNames() : [],
+            'is_admin' => $user ? $user->hasRole('admin') : false,
+
             'success' => true,
             'count' => $songs->total(),
             'page' => $songs->currentPage(),
@@ -42,10 +48,10 @@ class SongApiController extends Controller
             'query' => $query,
             'genre' =>  $request->genre,
 
-            // DEBUG INFO below - remove later
-            'debug_sql' => $sql,
-            'debug_bindings' => $bindings,
-            'debug_count' => $count,
+            // // DEBUG INFO below - remove later
+            // 'debug_sql' => $sql,
+            // 'debug_bindings' => $bindings,
+            // 'debug_count' => $count,
         ]);
     }
 }

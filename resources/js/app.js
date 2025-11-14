@@ -13,8 +13,12 @@ createApp({
     },
     methods: {
         async fetchSongs(filters = {}) {
-            const params = new URLSearchParams(filters);
-            const res = await fetch(`/api/songs?${params.toString()}`);
+            const params = new URLSearchParams(filters);    
+            const res = await fetch(`/api/songs?${params.toString()}`, {
+                credentials: "include"   // <-- THIS IS REQUIRED
+            });
+
+
             const data = await res.json();
             this.songs = [...data.data];
             this.genres = data.genres || [];
@@ -25,5 +29,5 @@ createApp({
     mounted() {
         this.fetchSongs();
     },
-    
+
 }).mount("#songs-app");

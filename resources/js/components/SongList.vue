@@ -10,6 +10,10 @@
             v-for="song in songs"
             :key="song.id"
             class="song-item flex justify-between items-center gap-x-6 py-5 hover:scale-105 transition-transform duration-300 hover:shadow-xl rounded-lg px-3 border-b border-gray-700"
+            :data-name="song.name"
+            :data-artist="song.artist.name"
+            :data-image="song.image_path"
+            :data-audio="song.file_path"
           >
             <!-- Left side: Song details -->
             <div class="flex items-center gap-x-4">
@@ -70,7 +74,13 @@
             </div>
           </li>
         </ul>
+        <!-- pagination controls -->
+        <div class="pagination">
+          <button @click="$emit('prev-page')" :disabled="page <= 1">Previous</button>
+          <button @click="$emit('next-page')" :disabled="page >= totalPages">Next</button>
+        </div>
       </div>
+      <!-- //here -->
     </div>
 
     <div v-else class="text-center text-gray-400 w-full py-10">
@@ -100,6 +110,7 @@ export default {
       }
     },
   },
+  
   watch: {
     songs(newSongs) {
       console.log("SongList received updated songs:", newSongs);

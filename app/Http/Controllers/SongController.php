@@ -38,6 +38,7 @@ class SongController extends Controller
     public function create()
     {
         $rawGenres = Song::pluck('genre'); // collection of json strings
+        $artists = Artist::all();
 
         $genres = $rawGenres
             ->filter() // remove nulls
@@ -46,7 +47,7 @@ class SongController extends Controller
             ->sort()
             ->values();
 
-        return view('songs.create', compact('genres'));
+        return view('songs.create', compact('genres', 'artists'));
     }
 
     /**

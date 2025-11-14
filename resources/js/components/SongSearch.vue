@@ -59,13 +59,13 @@ export default {
       // Update URL search params for genre and q
       const url = new URL(window.location);
       url.searchParams.set("genre", this.filters.genre || "");
-      url.searchParams.set("q", this.filters.query || "");
+      url.searchParams.set("q", this.filters.q || "");
       window.history.replaceState({}, "", url);
-
 
       // Emit event with current filters
       this.$emit("search", { ...this.filters });
     },
+    
     selectGenre(genre) {
       this.filters.genre = genre;
       this.selectedGenre = genre;

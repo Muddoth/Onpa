@@ -196,14 +196,19 @@
                                         <div class="flex min-w-0 gap-x-4">
 
                                             <img src="{{ asset($song->image_path ?? 'images/song-icon.png') }}"
-                                                alt="Song Icon" class="w-20 h-20 object-cover rounded-full bg-gray-700" />
+                                                alt="Song Icon"
+                                                class="w-20 h-20 object-cover rounded-full bg-gray-700" />
                                             <div class="min-w-0 flex-auto">
                                                 <p>
                                                     <span
                                                         class="text-lg font-semibold text-purple-500">{{ $song->name }}</span>
-                                                    <span class="text-sm text-white"> by {{ $song->artist->name }}</span>
+                                                    <span class="text-sm text-white"> by
+                                                        {{ $song->artist->name }}</span>
                                                 </p>
-                                                <p class="mt-1 truncate text-xs/5 text-white">{{ implode(', ', $song->genre) }}</p>
+                                                <p class="mt-1 truncate text-xs/5 text-white">
+                                                    {{ is_array($song->genre) ? implode(', ', $song->genre) : $song->genre }}
+                                                </p>
+
                                             </div>
                                         </div>
                                         <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
@@ -339,7 +344,7 @@
 
             // Allow clicking on progress bar to seek
             progressContainer.addEventListener('click', (e) => {
-            
+
                 const duration = audioPlayer.duration;
 
                 // Prevent seeking if song isn't loaded yet
@@ -361,15 +366,14 @@
             // Update the UI
             playerName.textContent = firstSong.name;
             playerArtist.textContent = firstSong.artist ?? ''; // optional
-            playerImage.src = firstSong.image_path
-                ? `/${firstSong.image_path}`
-                : '/images/default.jpg';
+            playerImage.src = firstSong.image_path ?
+                `/${firstSong.image_path}` :
+                '/images/default.jpg';
 
             // Set the audio source
             audioPlayer.src = `/audio/audio/${firstSong.file_name}`;
 
 
         });
-
     </script>
 </x-layout>

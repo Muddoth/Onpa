@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SongApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,8 @@ Route::get('/message', function () {
     return response()->json(['message' => 'Hello from API']);
 });
 
-Route::get('/songs', [App\Http\Controllers\SongApiController::class, 'index']);
-
+Route::middleware(['auth:sanctum', 'api'])->group(function () {
+    Route::get('/songs', [SongApiController::class, 'index']);
+});
+    
 

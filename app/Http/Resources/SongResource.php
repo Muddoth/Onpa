@@ -14,6 +14,9 @@ class SongResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        $user = auth()->user();
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -25,7 +28,11 @@ class SongResource extends JsonResource
                 'id' => $this->artist->id ?? null,
                 'name' =>  $this->artist->name ?? 'Unknown Artist',
             ],
-            // add other fields as needed
+            // Add permission flags per song
+            'role' => $user,
+            'can_update' => $user ? $user->can('update', $this->resource) : false,
+            'can_delete' => $user ? $user->can('delete', $this->resource) : false,
+
         ];
     }
 }
