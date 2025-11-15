@@ -43,7 +43,7 @@ class SongApiController extends Controller
             'success' => true,
             'count' => $songs->total(),
             'page' => $songs->currentPage(),
-            'data' => SongResource::collection($songs),
+            'data' => SongResource::collection($songs),//simply used for formating json->array
 
             'query' => $query,
             'genre' =>  $request->genre,

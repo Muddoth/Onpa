@@ -39,12 +39,14 @@
 export default {
   name: "SongSearch",
   props: {
-    genres: {
+    genres: {//from php?
       type: Array,
       required: true,
     },
   },
+  
   emits: ["search"],
+
   data() {
     return {
       filters: {
@@ -54,6 +56,7 @@ export default {
       selectedGenre: "all",
     };
   },
+
   methods: {
     emitSearch() {
       // Update URL search params for genre and q

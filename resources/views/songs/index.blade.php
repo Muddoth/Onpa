@@ -8,7 +8,9 @@
         @endcan
     @endslot
 
+    {{-- Vue Parent Component--}}
     <div id="songs-app" class="text-white">
+        {{--Vue Child Components--}}
         <song-search :genres='@json($genres)' @search="fetchSongs"></song-search>
         <song-list :songs="songs" @refresh="fetchSongs" ></song-list>
     </div>

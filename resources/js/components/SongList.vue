@@ -74,11 +74,11 @@
             </div>
           </li>
         </ul>
-        <!-- pagination controls -->
+        <!-- pagination controls
         <div class="pagination">
           <button @click="$emit('prev-page')" :disabled="page <= 1">Previous</button>
           <button @click="$emit('next-page')" :disabled="page >= totalPages">Next</button>
-        </div>
+        </div> -->
       </div>
       <!-- //here -->
     </div>
