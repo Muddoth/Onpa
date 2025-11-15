@@ -2,18 +2,24 @@ import './bootstrap';
 import { createApp } from "vue";
 import SongSearch from "./components/SongSearch.vue";
 import SongList from "./components/SongList.vue";
+import MusicPlayer from "./components/MusicPlayer.vue";
+
 
 createApp({
-    components: { SongSearch, SongList },
+    components: { SongSearch, SongList, MusicPlayer },
     data() {
         return {
             songs: [],
             genres: [],  // pass this down to SongSearch in blade
+            currentSong: null, // selected song
         };
     },
     methods: {
+        handleSelectSong(song) {
+            this.currentSong = song;
+        },
         async fetchSongs(filters = {}) {
-            const params = new URLSearchParams(filters);    
+            const params = new URLSearchParams(filters);
             const res = await fetch(`/api/songs?${params.toString()}`, {
                 credentials: "include"   // <-- THIS IS REQUIRED
             });

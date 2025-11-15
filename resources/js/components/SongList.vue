@@ -14,6 +14,7 @@
             :data-artist="song.artist.name"
             :data-image="song.image_path"
             :data-audio="song.file_path"
+            @click="selectSong(song)"
           >
             <!-- Left side: Song details -->
             <div class="flex items-center gap-x-4">
@@ -92,12 +93,16 @@
 <script>
 export default {
   name: "SongList",
+
   props: {
     songs: {
       type: Array,
       required: true,
     },
   },
+
+  emits: ["select-song", "refresh"],
+
   methods: {
     confirmDelete(id) {
       if (confirm("Delete this song?")) {
@@ -109,11 +114,25 @@ export default {
         }).then(() => this.$emit("refresh"));
       }
     },
+
+    selectSong(song) {
+      this.$emit("select-song", song);
+    },
   },
-  
+
   watch: {
-    songs(newSongs) {
-      console.log("SongList received updated songs:", newSongs);
+    song(newSong) {
+      if (!newSong) return;
+
+      this.currentSong = newSong;
+
+      // ➤ Set current index based on playlist
+      if (this.playlist && Array.isArray(this.playlist)) {
+        this.currentIndex = this.playlist.findIndex((s) => s.id === newSong.id);
+      }
+
+      this.loadAudio(newSong);
+      this.play();
     },
   },
 };

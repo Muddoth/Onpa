@@ -8,14 +8,17 @@
         @endcan
     @endslot
 
-    {{-- Vue Parent Component--}}
+    {{-- Vue Parent Component --}}
     <div id="songs-app" class="text-white">
-        {{--Vue Child Components--}}
+        {{-- Vue Child Components --}}
         <song-search :genres='@json($genres)' @search="fetchSongs"></song-search>
-        <song-list :songs="songs" @refresh="fetchSongs" ></song-list>
+        <song-list :songs="songs" @select-song="currentSong = $event"></song-list>
+        {{-- <music-player :song="currentSong"></music-player> --}}
+        <music-player :song="currentSong" :playlist="songs" @select-song="handleSelectSong"></music-player>
+
     </div>
-    
+
 
     @vite('resources/js/app.js')
-    <x-music-player />
+    
 </x-layout>
