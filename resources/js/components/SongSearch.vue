@@ -66,7 +66,7 @@ export default {
       window.history.replaceState({}, "", url);
 
       // Emit event with current filters
-      this.$emit("search", { ...this.filters });
+      this.$emit("search", { ...this.filters });//fetchSongs with these filters
     },
     
     selectGenre(genre) {

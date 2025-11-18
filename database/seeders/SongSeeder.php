@@ -24,7 +24,9 @@ class SongSeeder extends Seeder
 
         $count = 0;
 
+
         foreach ($audioFiles as $audioFile) {
+            $randomImages = collect(glob(public_path('images/songs/random/*.{jpg,jpeg,png,gif}'), GLOB_BRACE));
             // Extract the unique code after the last dash
             $fileNameWithoutExt = pathinfo($audioFile, PATHINFO_FILENAME);
             $parts = explode(' - ', $fileNameWithoutExt);
@@ -37,7 +39,8 @@ class SongSeeder extends Seeder
             // Fallback if no matching image
             $imagePath = $imageMatch
                 ? 'images/songs/' . basename($imageMatch)
-                : 'images/onpa-logo.png';
+                : 'images/songs/random/' . basename($randomImages->random());
+
 
             $artist = $artists->random();
 

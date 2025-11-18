@@ -12,7 +12,7 @@
     <div id="songs-app" class="text-white">
         {{-- Vue Child Components --}}
         <song-search :genres='@json($genres)' @search="fetchSongs"></song-search>
-        <song-list :songs="songs" @select-song="currentSong = $event"></song-list>
+        <song-list :songs="songs" @select-song="currentSong = $event"   @refresh="handleRefresh"></song-list>
         {{-- <music-player :song="currentSong"></music-player> --}}
         <music-player :song="currentSong" :playlist="songs" @select-song="handleSelectSong"></music-player>
 

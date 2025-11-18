@@ -4,6 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>
+        window.csrfToken = "{{ csrf_token() }}";
+    </script>
+
     <title>Onpa Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -33,7 +38,7 @@
                 <h1 class="text-2xl font-bold text-pink-400">Onpa</h1>
             </div>
             {{-- Dashboard Title --}}
-            @if(auth()->user()->hasRole('admin'))
+            @if (auth()->user()->hasRole('admin'))
                 <h2 class="text-lg font-semibold text-cyan-100 mb-3">Admin Dashboard</h2>
             @else
                 <h2 class="text-lg font-semibold text-cyan-300 mb-3">
@@ -68,7 +73,8 @@
         <!-- Logout Button -->
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition
+            <button type="submit"
+                class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition
            focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 ml-10">
                 Logout
             </button>

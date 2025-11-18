@@ -11,7 +11,7 @@ class SongApiController extends Controller
     public function index(Request $request)
     {
         
-        $user=$request->user();
+        $user = $request->user();
         $query = Song::query();
 
         if ($request->has('q') && $request->q !== '') {
