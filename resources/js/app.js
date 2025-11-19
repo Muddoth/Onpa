@@ -3,15 +3,17 @@ import { createApp } from "vue";
 import SongSearch from "./components/SongSearch.vue";
 import SongList from "./components/SongList.vue";
 import MusicPlayer from "./components/MusicPlayer.vue";
+import PlaylistList from './components/PlaylistList.vue';
+import Pagination from './components/Pagination.vue';
 
 
 createApp({
     components: {
-        SongSearch, SongList, MusicPlayer
+        SongSearch, SongList, MusicPlayer, PlaylistList, Pagination
     },
     data() {
         return {
-            songs: [], genres: [], currentSong: null, // selected song
+            songs: [], genres: [], currentSong: null, playlists: [], pagination: null,  
         };
     },
     methods: {
@@ -39,11 +41,22 @@ createApp({
             this.genres = data.genres || [];
 
             console.log("Fetched songs in parent:", this.songs);
-        }
+        },
+        async fetchPlaylists() {
+            const res = await fetch('/api/playlists', {
+                credentials: 'include'  // if you need auth with Sanctum
+            });
+            const data = await res.json();
+            this.playlists = data.data;  // assuming API returns { data: [...] }
+            console.log('Fetched playlists:', this.playlists);
+        },
+
 
     },
     mounted() {
         this.fetchSongs();
+        this.fetchPlaylists();
+
     },
 
 }).mount("#songs-app");

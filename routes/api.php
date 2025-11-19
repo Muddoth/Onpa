@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SongApiController;
+use App\Http\Controllers\PlaylistApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,9 @@ Route::get('/message', function () {
 
 Route::middleware(['auth:sanctum', 'api'])->group(function () {
     Route::get('/songs', [SongApiController::class, 'index']);
+    Route::get('/playlists', [PlaylistApiController::class, 'index']);
 });
+
+
     
 
