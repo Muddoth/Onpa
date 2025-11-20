@@ -1,14 +1,25 @@
-<x-layoutlanding>
+<x-layout title='Create User'>
 
     <form action="{{ route('profiles.store') }}" method="POST" enctype="multipart/form-data"
-        class="max-w-md mx-auto bg-gray-900 bg-opacity-70 rounded-3xl p-10 shadow-lg space-y-6 m-20">
+        class="max-w-md mx-auto bg-gray-900 bg-opacity-70 rounded-3xl p-8 shadow-lg space-y-6 m-10">
         @csrf
 
         <!-- Profile Information -->
         <div class="border-b border-white/10 pb-12">
             <h2 class="text-base/7 font-semibold text-white">Profile Information</h2>
 
-            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
+
+            <!-- Profile Picture -->
+            <div class="mb-4 text-center">
+                {{-- <label for="profile_picture" class="block text-sm font-medium text-gray-400 mb-2">Profile
+                    Picture</label> --}}
+                <input type="file" name="profile_picture" id="profile_picture" accept="image/*"
+                    class="rounded-full mx-auto w-32 h-32 object-cover border border-gray-600">
+                @error('profile_picture')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2">
 
                 <!-- Name -->
                 <div class="sm:col-span-1">
@@ -77,16 +88,7 @@
                     @enderror
                 </div>
 
-                <!-- Profile Picture -->
-                <div class="sm:col-span-2">
-                    <label for="profile_picture" class="block text-sm/6 font-medium text-white">Profile
-                        Picture</label>
-                    <input type="file" name="profile_picture" id="profile_picture" accept="image/*"
-                        class="block w-full mt-2 text-sm text-gray-300 border border-gray-600 rounded-lg cursor-pointer bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    @error('profile_picture')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+
 
             </div>
         </div>
@@ -98,4 +100,4 @@
                 class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-indigo-500">Save</button>
         </div>
     </form>
-</x-layoutlanding>
+</x-layout>

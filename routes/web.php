@@ -82,3 +82,10 @@ Route::get('/counter', function(){
 
     return view('counter');
 })->name('counter');
+
+Route::get('/livewire', function(){
+
+    return view('livewire');
+})->name('livewire');
+
+

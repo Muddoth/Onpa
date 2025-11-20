@@ -15,6 +15,8 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 
     @stack('styles')
+    @livewireStyles
+    
 
 </head>
 
@@ -106,6 +108,7 @@
         </div>
     </main>
     @stack('scripts')
+    @livewireScripts   
 
 
 </body>

@@ -9,6 +9,8 @@
 
     @endslot
     @if(auth()->user()->hasRole('admin'))
+    <livewire:profile-search/>
+    <livewire:profile-show/>
         <div class="grid grid-cols-3 gap-6 max-w-7xl mx-auto p-6">
             @foreach($profiles as $profile)
                 <div class="bg-gray-800 text-white rounded-xl shadow-lg p-6">

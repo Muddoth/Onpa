@@ -63,11 +63,12 @@ class ProfileController extends Controller
     }
 
 
-    public function edit()
+    public function edit($id)
     {
-        $profile = auth()->user()->profile;
+        $profile = Profile::findOrFail($id);
         return view('profiles.edit', compact('profile'));
     }
+
 
     public function update(Request $request)
     {
@@ -123,5 +124,10 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('profiles.index')->with('error', 'You cannot delete this profile.');
+    }
+    public function show($id)
+    {
+        $profile = Profile::findOrFail($id);
+        return view('profiles.show', compact('profile'));
     }
 }

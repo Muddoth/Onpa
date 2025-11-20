@@ -8,6 +8,30 @@
             @csrf
             @method('PATCH')
 
+            <!-- Profile Picture -->
+            <div class="mb-4 text-center relative w-32 h-32 mx-auto cursor-pointer">
+                {{-- Hidden file input --}}
+                <input type="file" name="profile_picture" id="profile_picture" accept="image/*"
+                    class="opacity-0 absolute inset-0 w-full h-full cursor-pointer">
+
+                {{-- Show current profile picture --}}
+                @if ($profile->profile_picture)
+                    <img src="{{ asset( $profile->profile_picture) }}" alt="Profile Picture"
+                        class="rounded-full w-32 h-32 object-cover border border-gray-600">
+                @else
+                    {{-- Placeholder if no picture --}}
+                    <div
+                        class="rounded-full w-32 h-32 border border-gray-600 flex items-center justify-center text-gray-500 bg-gray-700">
+                        No Image
+                    </div>
+                @endif
+            </div>
+
+            @error('profile_picture')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+
+
             <div>
                 <label class="block text-sm font-medium">Name</label>
                 <input type="text" name="name" value="{{ old('name', $profile->name) }}"
@@ -31,8 +55,7 @@
 
             <div>
                 <label class="block text-sm font-medium">Bio</label>
-                <textarea name="bio" rows="3"
-                    class="w-full rounded-md bg-gray-700 px-3 py-2 text-white focus:outline-none">{{ old('bio', $profile->bio) }}</textarea>
+                <textarea name="bio" rows="3" class="w-full rounded-md bg-gray-700 px-3 py-2 text-white focus:outline-none">{{ old('bio', $profile->bio) }}</textarea>
             </div>
 
             <div>
@@ -41,12 +64,6 @@
                     value="{{ old('favourite_genres', $profile->favourite_genres) }}"
                     class="w-full rounded-md bg-gray-700 px-3 py-2 text-white focus:outline-none"
                     placeholder="Pop, Rock, Jazz...">
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium">Profile Picture</label>
-                <input type="file" name="profile_picture" accept="image/*"
-                    class="block w-full text-sm text-gray-300 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 focus:outline-none">
             </div>
 
             <div class="flex justify-end gap-x-4 mt-6">
