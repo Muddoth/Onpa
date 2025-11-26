@@ -11,7 +11,22 @@ class ProfileSearch extends Component
     #[Validate('required')]
     public $search = '';
 
+    public $selectedProfile = null;
+
+
     public $profiles = [];
+
+    protected $listeners = [
+        'searchClearResults' => 'clearSearch',
+    ];
+
+
+
+    public function loadProfile($id)
+    {
+        $this->selectedProfile = Profile::find($id);
+    }
+
 
     public function updatedSearch($value)
     {
@@ -36,8 +51,10 @@ class ProfileSearch extends Component
 
     public function clearSearch()
     {
-        $this->reset('search', 'profiles');
+        logger('clearSearch called');
+        $this->reset('search', 'profiles', 'selectedProfile');
     }
+
 
     public function render()
     {

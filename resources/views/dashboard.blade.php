@@ -49,6 +49,20 @@
     #progress-container:hover {
         background-color: #a0f0f7;
     }
+
+    .spin {
+        animation: spin 10s linear infinite;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
 </style>
 
 <x-layout title="Dashboard">
@@ -108,16 +122,17 @@
             <div class="flex flex-col w-full">
 
 
-                <div class="flex flex-col sm:flex-row items-center">
+                <div class="flex flex-col sm:flex-row items-center py-5">
                     <!-- Music Card-->
-                    <div class="p-10 bg-transparent flex rounded-lg justify-center items-center h-fit music-card">
-                        <div class="p-2 rounded-lg w-40">
+                    <div class="p-10 bg-transparent  flex rounded-lg justify-center items-center h-fit music-card">
+                        <div class="p-2 rounded-lg w-40 ">
                             <!-- Album Cover -->
-                            <div
-                                class="w-36 h-36 rounded-full overflow-hidden flex justify-center items-center bg-gray-700">
+                            <div id="album-rotator"
+                                class="w-36 h-36 rounded-full overflow-hidden flex justify-center items-center bg-gray-700 transition-all">
                                 <img id="player-image" src=""
                                     class="fade-image w-full h-full object-cover rounded-full aspect-square" />
                             </div>
+
 
                             <!-- Song Info -->
                             <p class="text-center mt-1">
@@ -249,6 +264,8 @@
             const progressContainer = document.getElementById('progress-container');
             const progressBar = document.getElementById('progress-bar');
             const songs = @json($latestSongs);
+            const rotator = document.getElementById('album-rotator');
+
 
 
 
@@ -275,6 +292,8 @@
                 // Load and play the song
                 audioPlayer.src = song.dataset.audio;
                 audioPlayer.play();
+                rotator.classList.add('spin');
+
                 isPlaying = true;
                 currentSongIndex = index;
 
@@ -302,12 +321,16 @@
 
                 if (isPlaying) {
                     audioPlayer.pause();
+                    rotator.classList.remove('spin');
+
                     // Change to play icon
                     playIcon.innerHTML = `
                 <path d="M16.6598 14.6474C18.4467 13.4935 18.4467 10.5065 16.6598 9.35258L5.87083 2.38548C4.13419 1.26402 2 2.72368 2 5.0329V18.9671C2 21.2763 4.13419 22.736 5.87083 21.6145L16.6598 14.6474Z"
                     fill="#000000"></path>`;
                 } else {
                     audioPlayer.play();
+                    rotator.classList.add('spin');
+
                     // Change to pause icon
                     playIcon.innerHTML = `
                 <path d="M2 6C2 4.11438 2 3.17157 2.58579 2.58579C3.17157 2 4.11438 2 6 2C7.88562 2 8.82843 2 9.41421 2.58579C10 3.17157 10 4.11438 10 6V18C10 19.8856 10 20.8284 9.41421 21.4142C8.82843 22 7.88562 22 6 22C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V6Z"

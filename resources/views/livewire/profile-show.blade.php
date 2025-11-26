@@ -1,6 +1,6 @@
 <div>
     @if ($profile)
-        <div class="text-white p-4 rounded flex items-start justify-between bg-gray-800">
+        <div class="text-white p-4 rounded bg-gray-800 w-full max-w-md">
             <h1 class="font-bold text-xl">{{ $profile->name }}</h1>
             <p>Age: {{ $profile->age }}</p>
             <p>Gender: {{ $profile->gender }}</p>

@@ -7,14 +7,8 @@ use Livewire\Component;
 
 class ProfileShow extends Component
 {
-    public $profile;
-
-    protected $listeners = ['show-profile' => 'loadProfile'];
-
-    public function loadProfile($data)
-    {
-        $this->profile = Profile::find($data['id']);
-    }
+    #[Reactive]
+    public Profile $profile;
 
     public function render()
     {

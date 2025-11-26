@@ -16,7 +16,8 @@
 
     @stack('styles')
     @livewireStyles
-    
+
+
 
 </head>
 
@@ -28,7 +29,8 @@
     }
 </style>
 
-<body class="bg-gray-900 flex">
+<body x-data x-on:click="$dispatch('searchClearResults'); console.log('Dispatched searchClearResults')"
+    class="bg-gray-900 flex">
 
 
     <!-- Sidebar -->
@@ -50,22 +52,22 @@
             <div class="border mt-2 mb-10 w-full border-cyan-300"></div>
 
             <nav class="flex flex-col space-y-4 text-xl">
-                <a href="{{ route('dashboard') }}"
+                <a wire:navigate.hover href="{{ route('dashboard') }}"
                     class="transition {{ request()->routeIs('dashboard') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
                     Dashboard
                 </a>
 
-                <a href="{{ route('songs.index') }}"
+                <a wire:navigate.hover href="{{ route('songs.index') }}"
                     class="transition {{ request()->routeIs('songs.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
                     Songs
                 </a>
 
-                <a href="{{ route('profiles.index') }}"
+                <a wire:navigate.hover href="{{ route('profiles.index') }}"
                     class="transition {{ request()->routeIs('profiles.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
                     User Profile
                 </a>
 
-                <a href="{{ route('playlists.index') }}"
+                <a wire:navigate.hover href="{{ route('playlists.index') }}"
                     class="transition {{ request()->routeIs('playlists.index') ? 'text-pink-400 font-semibold' : 'text-white hover:text-pink-400' }}">
                     Playlist
                 </a>
@@ -108,7 +110,17 @@
         </div>
     </main>
     @stack('scripts')
-    @livewireScripts   
+    @livewireScripts
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script data-navigate-once>
+        document.addEventListener('searchClearResults', () => {
+            Livewire.emit('searchClearResults')
+
+            console.log('Cleared results');
+        });
+    </script>
+
 
 
 </body>
