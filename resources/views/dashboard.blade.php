@@ -63,6 +63,31 @@
             transform: rotate(360deg);
         }
     }
+
+    .song-marquee {
+        width: 200px;
+        /* adjust based on your layout */
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
+        margin: 0 auto;
+    }
+
+    .song-scroll {
+        display: inline-block;
+        padding-left: 100%;
+        animation: scrollText 5s linear infinite;
+    }
+
+    @keyframes scrollText {
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(-100%);
+        }
+    }
 </style>
 
 <x-layout title="Dashboard">
@@ -136,9 +161,19 @@
 
                             <!-- Song Info -->
                             <p class="text-center mt-1">
+                            <div class="song-marquee w-20 mx-auto overflow-hidden whitespace-nowrap">
+                                <span id="player-name" class="text-pink text-md font-semibold song-scroll"></span>
+                            </div>
+
+                            <span id="player-artist" class="text-white text-xs pl-8"></span>
+                            </p>
+                            {{-- 
+                            <!-- Song Info -->
+                            <p class="text-center mt-1">
                                 <span id="player-name" class="text-pink text-md font-semibold"></span><br>
                                 <span id="player-artist" class="text-white text-xs"></span>
-                            </p>
+                            </p> --}}
+
 
                             <!-- Progress Bar -->
                             <div id="progress-container"
@@ -253,6 +288,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+
+            function updateScrolling() {
+                const nameEl = document.getElementById('player-name');
+                const marquee = nameEl.parentElement;
+
+                if (nameEl.scrollWidth > marquee.clientWidth) {
+                    nameEl.classList.add('song-scroll');
+                } else {
+                    nameEl.classList.remove('song-scroll');
+                }
+            }
             const songItems = document.querySelectorAll('.song-item');
             const playerImage = document.getElementById('player-image');
             const playerName = document.getElementById('player-name');
@@ -287,6 +333,9 @@
 
                 // Update name & artist
                 playerName.textContent = song.dataset.name;
+                updateScrolling();
+
+
                 playerArtist.textContent = "by " + song.dataset.artist;
 
                 // Load and play the song
@@ -385,16 +434,18 @@
 
             // Take the first song
             const firstSong = songs[0];
+            console.log('First song data:', firstSong);
+
 
             // Update the UI
             playerName.textContent = firstSong.name;
-            playerArtist.textContent = firstSong.artist ?? ''; // optional
+            playerArtist.textContent = firstSong.artist?.name ?? '';
             playerImage.src = firstSong.image_path ?
                 `/${firstSong.image_path}` :
                 '/images/default.jpg';
 
             // Set the audio source
-            audioPlayer.src = `/audio/audio/${firstSong.file_name}`;
+            audioPlayer.src = `/${firstSong.file_path}`;
 
 
         });

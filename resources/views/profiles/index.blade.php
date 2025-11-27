@@ -1,61 +1,21 @@
 <x-layout title="Profile Page">
     @slot('headerButton')
-    @role('admin')
-    <a href="{{ route('profiles.create') }}"
-        class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg">
-        Create User
-    </a>
-    @endrole
+        @role('admin')
+            <a href="{{ route('profiles.create') }}"
+                class="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-lg">
+                Create User
+            </a>
+        @endrole
 
     @endslot
-    @if(auth()->user()->hasRole('admin'))
-    
-    <livewire:profile-search/>
-    
-        <div class="grid grid-cols-3 gap-6 max-w-7xl mx-auto p-6">
-            @foreach($profiles as $profile)
-                <div class="bg-gray-800 text-white rounded-xl shadow-lg p-6">
-                    <div class="flex items-center space-x-4 mb-4">
-                        <img src="{{ asset($profile->profile_picture ?? 'images/default-avatar.png') }}"
-                            alt="{{ $profile->name }}" class="w-16 h-16 rounded-full object-cover bg-gray-700">
-                        <div>
-                            <h3 class="text-lg font-semibold text-pink-400">{{ $profile->name }}</h3>
-                            <p class="text-gray-300 text-sm">{{ $profile->gender }}, {{ $profile->age }} years old</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-400 text-sm italic mb-4">{{ $profile->bio ?? 'No bio available yet.' }}</p>
-                    <p class="text-gray-300 text-sm mb-4">
-                        Favourite Genres: {{ $profile->favourite_genres ?? 'Not specified' }}
-                    </p>
-
-                    <div class="flex space-x-4">
-                        <a href="{{ route('profiles.edit', $profile->id) }}"
-                            class="px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded-lg text-sm font-semibold">
-                            Edit
-                        </a>
-
-                        <form action="{{ route('profiles.delete', $profile->id) }}" method="POST"
-                            onsubmit="return confirm('Delete this profile?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-sm font-semibold">
-                                Delete
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        <div class="mt-6 max-w-7xl mx-auto px-6">
-            {{ $profiles->links() }}
-        </div>
+    @if (auth()->user()->hasRole('admin'))
+            <livewire:profile-index />
     @else
         <div class="max-w-md p-8 sm:flex sm:space-x-6 bg-gray-800 text-white rounded-xl shadow-lg mx-auto mt-10">
             <div class="flex-shrink-0 w-full mb-6 h-44 sm:h-32 sm:w-32 sm:mb-0">
                 <img src="{{ asset($profiles->profile_picture ?? 'images/default-avatar.png') }}"
-                    alt="{{ $profiles->name }}" class="object-cover object-center w-full h-full rounded-lg bg-gray-700">
+                    alt="{{ $profiles->name }}"
+                    class="object-cover object-center w-full h-full rounded-lg bg-gray-700">
             </div>
 
             <div class="flex flex-col space-y-4">

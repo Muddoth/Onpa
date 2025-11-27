@@ -8,18 +8,32 @@ use App\Models\User;
 
 class ProfileController extends Controller
 {
+
     public function index()
     {
         if (auth()->user()->hasRole('admin')) {
-            // Admin sees all profiles
-            $profiles = Profile::paginate(10);
+            return view('profiles.index', [
+                'profiles' => null, // admin doesn't need this
+            ]);
         } else {
-            // User sees only their profile
-            $profiles = auth()->user()->profile;  // Directly return a single profile
+            return view('profiles.index', [
+                'profiles' => auth()->user()->profile,
+            ]);
         }
-
-        return view('profiles.index', compact('profiles'));
     }
+
+    // public function index()
+    // {
+    //     if (auth()->user()->hasRole('admin')) {
+    //         // Admin sees all profiles
+    //         // $profiles = Profile::paginate(10);
+    //     } else {
+    //         // User sees only their profile
+    //         $profiles = auth()->user()->profile;  // Directly return a single profile
+    //     }
+
+    //     return view('profiles.index', compact('profiles'));
+    // }
 
 
     public function create()
